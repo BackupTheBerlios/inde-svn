@@ -538,17 +538,18 @@ void TabEditor::showLineNumbers(FXbool flag)
 void TabEditor::showNextTab()
 {
 	FXTRACE((1, "TabEditor::showNextTab()\n"));
-	tabSwitched();
 	if (getCurrent() < 0)
 	{
 		return;
 	}
 	if (getCurrent() == (numChildren()/2)-1)
 	{
+		tabSwitched();
 		setCurrent(0);
 	}
 	else
 	{
+		tabSwitched();
 		setCurrent(getCurrent()+1);
 	}
 }
@@ -556,11 +557,11 @@ void TabEditor::showNextTab()
 void TabEditor::showPreviousTab()
 {
 	FXTRACE((1, "TabEditor::showPreviousTab()\n"));
-	tabSwitched();
 	if (getCurrent() <= 0)
 	{
 		return;
 	}
+	tabSwitched();
 	setCurrent(getCurrent()-1);
 }
 
