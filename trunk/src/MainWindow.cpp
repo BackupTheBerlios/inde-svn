@@ -3,6 +3,7 @@
 #include "AboutDialog.h"
 #include "NewProjectWizard.h"
 #include "ProjectSettingsDialog.h"
+#include "FileSystem.h"
 
 FXDEFMAP(MainWindow) MainWindowMap[] = {
 	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_QUIT,				MainWindow::onQuit),
@@ -27,11 +28,7 @@ FXIMPLEMENT(MainWindow, FXMainWindow, MainWindowMap, ARRAYNUMBER(MainWindowMap))
 MainWindow::MainWindow(InDE* app, const FXString& title)
 :	FXMainWindow(app, title, NULL, NULL, DECOR_ALL, 0, 0, 800, 600)
 {
-#ifdef WIN32
-	settings = new Settings(FXFile::getHomeDirectory() + "\\InDE\\settings.ini");
-#else
-	settings = new Settings(FXFile::getHomeDirectory() + "/.InDE/settings");
-#endif
+	settings = new Settings(FXFile::getHomeDirectory() + FS::dirSeparator() + FS::hiddenName("InDE") + FS::dirSeparator() + FS::configFilename("settings"));
 	readSettings();
 	buildMenu();
 	statusBar = new FXStatusBar(this, LAYOUT_SIDE_BOTTOM|LAYOUT_FILL_X|STATUSBAR_WITH_DRAGCORNER|FRAME_RAISED);
