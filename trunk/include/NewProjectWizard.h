@@ -18,10 +18,16 @@ class NewProjectWizard : public FXWizard  {
 		FXVerticalFrame	*step4;
 		FXVerticalFrame	*step5;
 
+		// step 1 vars
 		FXTextField		*nameField;
 		FXText			*descriptionField;
 		FXComboBox		*targetBox;
 		FXTextField		*versionField;
+
+		// step 2 vars
+		FXTextField		*srcDir;
+		FXTextField		*includeDir;
+		FXTextField		*binDir;
 
 	protected:
 		NewProjectWizard() {};

@@ -51,6 +51,7 @@ class MainWindow : public FXMainWindow
 		// Settings
 		InDESettings			settings;
 		ProjectSettings			projectSettings;
+		FXbool					projectSettingsDirty;
 		
 		// Syntax
 		FXSyntax*				syntax;
@@ -83,6 +84,9 @@ class MainWindow : public FXMainWindow
 			ID_PROJECT_DESCRIPTION,
 			ID_PROJECT_TARGET,
 			ID_PROJECT_VERSION,
+			ID_PROJECT_SRCDIR,
+			ID_PROJECT_INCLUDEDIR,
+			ID_PROJECT_BINDIR,
 			ID_ABOUT,
 			ID_LAST,
 		};
@@ -114,6 +118,12 @@ class MainWindow : public FXMainWindow
 		long onUpdProjectTarget(FXObject*, FXSelector, void*);
 		long onCmdProjectVersion(FXObject*, FXSelector, void*);
 		long onUpdProjectVersion(FXObject*, FXSelector, void*);
+		long onCmdProjectSrcDir(FXObject*, FXSelector, void*);
+		long onUpdProjectSrcDir(FXObject*, FXSelector, void*);
+		long onCmdProjectIncludeDir(FXObject*, FXSelector, void*);
+		long onUpdProjectIncludeDir(FXObject*, FXSelector, void*);
+		long onCmdProjectBinDir(FXObject*, FXSelector, void*);
+		long onUpdProjectBinDir(FXObject*, FXSelector, void*);
 	
 	public:
 	

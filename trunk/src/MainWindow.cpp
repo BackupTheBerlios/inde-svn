@@ -37,6 +37,12 @@ FXDEFMAP(MainWindow) MainWindowMap[] = {
 	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_TARGET, MainWindow::onUpdProjectTarget),
 	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_VERSION, MainWindow::onCmdProjectVersion),
 	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_VERSION, MainWindow::onUpdProjectVersion),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_SRCDIR, MainWindow::onCmdProjectSrcDir),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_SRCDIR, MainWindow::onUpdProjectSrcDir),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_INCLUDEDIR, MainWindow::onCmdProjectIncludeDir),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_INCLUDEDIR, MainWindow::onUpdProjectIncludeDir),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_BINDIR, MainWindow::onCmdProjectBinDir),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_BINDIR, MainWindow::onUpdProjectBinDir),
 };
 
 
@@ -145,6 +151,7 @@ MainWindow::create()
 	FXMainWindow::create();
 	loadSettings();
 	show(PLACEMENT_SCREEN);
+	projectSettingsDirty = FALSE;
 }
 
 
@@ -293,6 +300,7 @@ long MainWindow::onUpdSettingAutosaveInterval(FXObject* sender, FXSelector, void
 long MainWindow::onCmdProjectName(FXObject*, FXSelector, void* ptr) 
 {
 	projectSettings.general.name = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
 	return 1;
 }
 
@@ -307,6 +315,7 @@ long MainWindow::onUpdProjectName(FXObject* sender, FXSelector, void* ptr)
 long MainWindow::onCmdProjectDescription(FXObject*, FXSelector, void* ptr) 
 {
 	projectSettings.general.description = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
 	return 1;
 }
 
@@ -321,6 +330,7 @@ long MainWindow::onUpdProjectDescription(FXObject* sender, FXSelector, void* ptr
 long MainWindow::onCmdProjectTarget(FXObject*, FXSelector, void* ptr) 
 {
 	projectSettings.general.target = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
 	return 1;
 }
 
@@ -335,6 +345,7 @@ long MainWindow::onUpdProjectTarget(FXObject* sender, FXSelector, void* ptr)
 long MainWindow::onCmdProjectVersion(FXObject*, FXSelector, void* ptr) 
 {
 	projectSettings.general.version = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
 	return 1;
 }
 
@@ -344,4 +355,56 @@ long MainWindow::onUpdProjectVersion(FXObject* sender, FXSelector, void* ptr)
 	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.general.version);
 	return 1;
 }
+
+
+long MainWindow::onCmdProjectSrcDir(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.dirs.srcDir = (FXString)(FXchar*)ptr;
+	if (projectSettings.dirs.srcDir[projectSettings.dirs.srcDir.length()-1] != '/')
+		projectSettings.dirs.srcDir.append('/');
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectSrcDir(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.dirs.srcDir);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectIncludeDir(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.dirs.includeDir = (FXString)(FXchar*)ptr;
+	if (projectSettings.dirs.includeDir[projectSettings.dirs.includeDir.length()-1] != '/')
+		projectSettings.dirs.includeDir.append('/');
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectIncludeDir(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.dirs.includeDir);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectBinDir(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.dirs.binDir = (FXString)(FXchar*)ptr;
+	if (projectSettings.dirs.binDir[projectSettings.dirs.binDir.length()-1] != '/')
+		projectSettings.dirs.binDir.append('/');
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectBinDir(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.dirs.binDir);
+	return 1;
+}
+
 

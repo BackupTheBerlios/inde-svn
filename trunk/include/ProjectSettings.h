@@ -14,13 +14,14 @@ struct ProjectGeneralSettings {
 	FXString	version;
 };
 
-struct ProjectPathSettings {
+struct ProjectLibrarySettings {
 	FXString	includePathes;
 	FXString	libraryPathes;
+	FXString	libraries;
 };
 
 struct ProjectDirectorySettings {
-	FXString	sourceDir;
+	FXString	srcDir;
 	FXString	includeDir;
 	FXString	binDir;
 };
@@ -35,7 +36,7 @@ struct ProjectCompilerSettings {
 
 struct ProjectSettings {
 	ProjectGeneralSettings		general;
-	ProjectPathSettings			path;
+	ProjectLibrarySettings		libs;
 	ProjectDirectorySettings	dirs;
 	ProjectCompilerSettings		compiler;
 };
