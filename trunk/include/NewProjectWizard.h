@@ -20,6 +20,7 @@ class NewProjectWizard : public FXWizard  {
 		FXString		target;
 		FXString		version;
 		FXString		author;
+		FXString		mail;
 		FXint			license;
 		FXString		licenseHeader;
 		
@@ -60,6 +61,7 @@ class NewProjectWizard : public FXWizard  {
 		FXDataTarget	tgtPic;
 
 		FXDataTarget	tgtAuthor;
+		FXDataTarget	tgtMail;
 		FXDataTarget	tgtLicense;
 		FXDataTarget	tgtLicenseHeader;
 	

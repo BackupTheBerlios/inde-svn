@@ -38,6 +38,7 @@ NewProjectWizard::NewProjectWizard(MainWindow* owner, const FXString& name)
 	tgtDebug(debug),
 	tgtPic(pic),
 	tgtAuthor(author),
+	tgtMail(mail),
 	tgtLicense(license),
 	tgtLicenseHeader(licenseHeader),
 	srcDir("src/"),
@@ -110,11 +111,15 @@ NewProjectWizard::NewProjectWizard(MainWindow* owner, const FXString& name)
 	// step 5: author and license 
 	step5 = new FXVerticalFrame(getContainer(), LAYOUT_FILL_X|LAYOUT_FILL_Y);
 	new DialogTitle(step5, "Author and License");
-	FXVerticalFrame *vf = new FXVerticalFrame(step5, LAYOUT_FILL_X|LAYOUT_FILL_Y);
-	new FXLabel(vf, "Author's name");
-	new FXTextField(vf, 60, &tgtAuthor, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
+	FXVerticalFrame *vf1 = new FXVerticalFrame(step5, LAYOUT_FILL_X|LAYOUT_FILL_Y);
+	new FXLabel(vf1, "Author's name");
+	new FXTextField(vf1, 60, &tgtAuthor, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
+	FXVerticalFrame *vf2 = new FXVerticalFrame(step5, LAYOUT_FILL_X|LAYOUT_FILL_Y);
+	new FXLabel(vf2, "Author's email address");
+	new FXTextField(vf2, 60, &tgtMail, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
 	FXGroupBox *gp = new FXGroupBox(step5, "choose license");
 	FXMatrix *mat = new FXMatrix(gp, 5, MATRIX_BY_COLUMNS|LAYOUT_FILL_X);
+	new FXRadioButton(mat, "none", &tgtLicense, FXDataTarget::ID_OPTION+PROJECT_LICENSE_NONE);
 	new FXRadioButton(mat, "GPL", &tgtLicense, FXDataTarget::ID_OPTION+PROJECT_LICENSE_GPL);
 	new FXRadioButton(mat, "LGPL", &tgtLicense, FXDataTarget::ID_OPTION+PROJECT_LICENSE_LGPL);
 	new FXRadioButton(mat, "user defined", &tgtLicense, FXDataTarget::ID_OPTION+PROJECT_LICENSE_USER);
@@ -166,12 +171,6 @@ FXbool NewProjectWizard::check()
 	{
 		errors++;
 		FXMessageBox::error(this, MBOX_OK, "Error", "No project build target defined.");
-	}
-	
-	if (!errors && version.empty())
-	{
-		errors++;
-		FXMessageBox::error(this, MBOX_OK, "Error", "Please define a project version.");
 	}
 	
 	if (!errors && author.empty())

@@ -9,6 +9,7 @@
 #define PROJECT_BUILD_STATIC "Static library"
 #define PROJECT_BUILD_SHARED "Shared library"
 
+#define PROJECT_LICENSE_NONE	0
 #define PROJECT_LICENSE_GPL		1
 #define PROJECT_LICENSE_LGPL	2
 #define PROJECT_LICENSE_USER	100

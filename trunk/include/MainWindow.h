@@ -5,6 +5,7 @@
 #include <FXArray.h>
 #include "Hilite.h"
 #include "ProjectSettings.h"
+#include "ProjectSettingsDialog.h"
 #include "NewProjectWizard.h"
 #include "InDESettings.h"
 #include "SettingsDialog.h"
@@ -103,7 +104,11 @@ class MainWindow : public FXMainWindow
 			ID_PROJECT_DEFINES,
 			ID_PROJECT_SWITCHES,
 			ID_PROJECT_AUTHOR,
-			ID_PROJECT_LICENSE,
+			ID_PROJECT_MAIL,
+			ID_PROJECT_LICENSE_NONE,
+			ID_PROJECT_LICENSE_GPL,
+			ID_PROJECT_LICENSE_LGPL,
+			ID_PROJECT_LICENSE_USER,
 			ID_PROJECT_LICENSEHEADER,
 			
 			ID_ABOUT,
@@ -182,6 +187,8 @@ class MainWindow : public FXMainWindow
 		long onUpdProjectSwitches(FXObject*, FXSelector, void*);
 		long onCmdProjectAuthor(FXObject*, FXSelector, void*);
 		long onUpdProjectAuthor(FXObject*, FXSelector, void*);
+		long onCmdProjectMail(FXObject*, FXSelector, void*);
+		long onUpdProjectMail(FXObject*, FXSelector, void*);
 		long onCmdProjectLicense(FXObject*, FXSelector, void*);
 		long onUpdProjectLicense(FXObject*, FXSelector, void*);
 		long onCmdProjectLicenseHeader(FXObject*, FXSelector, void*);

@@ -74,10 +74,12 @@ FXDEFMAP(MainWindow) MainWindowMap[] = {
 	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_SWITCHES, 			MainWindow::onUpdProjectSwitches),
 	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_AUTHOR, 				MainWindow::onCmdProjectAuthor),
 	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_AUTHOR, 				MainWindow::onUpdProjectAuthor),
-	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_LICENSE, 				MainWindow::onCmdProjectLicense),
-	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_LICENSE, 				MainWindow::onUpdProjectLicense),
-	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_LICENSEHEADER, 				MainWindow::onCmdProjectLicenseHeader),
-	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_LICENSEHEADER, 				MainWindow::onUpdProjectLicenseHeader),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_MAIL,				MainWindow::onCmdProjectMail),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_MAIL,				MainWindow::onUpdProjectMail),
+	FXMAPFUNCS(SEL_COMMAND,		MainWindow::ID_PROJECT_LICENSE_NONE,	MainWindow::ID_PROJECT_LICENSE_USER, 			MainWindow::onCmdProjectLicense),
+	FXMAPFUNCS(SEL_UPDATE,		MainWindow::ID_PROJECT_LICENSE_NONE,	MainWindow::ID_PROJECT_LICENSE_USER, 			MainWindow::onUpdProjectLicense),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_LICENSEHEADER, 		MainWindow::onCmdProjectLicenseHeader),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_LICENSEHEADER, 		MainWindow::onUpdProjectLicenseHeader),
 };
 
 FXIMPLEMENT(MainWindow, FXMainWindow, MainWindowMap, ARRAYNUMBER(MainWindowMap));
@@ -133,8 +135,11 @@ MainWindow::MainWindow(App* a, const FXString& title)
 	// Menu commands
 	new FXMenuCommand(fileMenu, "New File\tCtrl+N", NULL, this, ID_FILE_NEW);
 	new FXMenuCommand(fileMenu, "Quit\tCtrl+Q\tHallo", NULL, this, ID_QUIT);
+
 	new FXMenuCommand(projectMenu, "Create new project", NULL, this, ID_PROJECT_NEW);
 	new FXMenuCommand(projectMenu, "Open project", NULL, this, ID_PROJECT_OPEN);
+	new FXMenuCommand(projectMenu, "Project settings", NULL, this, ID_PROJECT_EDITCONFIG);
+
 	new FXMenuCommand(preferencesMenu, "InDE settings", NULL, this, ID_EDITSETTINGS);
 	
 	// Splitter
@@ -276,6 +281,10 @@ long MainWindow::onCmdNewProject(FXObject*, FXSelector, void*)
 	config.writeStringEntry("Compiler", "defines", wizard.defines.text());
 	config.writeStringEntry("Compiler", "switches", wizard.switches.text());
 	config.unparseFile(dirname+"/project.cfg");
+	config.writeStringEntry("General", "author", wizard.author.text());
+	config.writeIntEntry("General", "license", wizard.license);
+	config.writeStringEntry("General", "licenseHeader", wizard.licenseHeader.text());
+	config.writeStringEntry("General", "mailAddress", wizard.mail.text());
 
 	FXMessageBox::information(this, MBOX_OK, "Success", FXString("Project '"+wizard.name+"' successfully created.").text());
 
@@ -711,17 +720,64 @@ long MainWindow::onUpdProjectAuthor(FXObject* sender, FXSelector, void* ptr)
 }
 
 
-long MainWindow::onCmdProjectLicense(FXObject*, FXSelector, void* ptr)
+long MainWindow::onCmdProjectMail(FXObject*, FXSelector, void* ptr)
 {
-	projectSettings.general.license = (FXint)(FXival)ptr;
+	projectSettings.general.mail = (FXString)(FXchar*)ptr;
 	projectSettingsDirty = TRUE;
 	return 1;
 }
 
 
-long MainWindow::onUpdProjectLicense(FXObject* sender, FXSelector, void* ptr)
+long MainWindow::onUpdProjectMail(FXObject* sender, FXSelector, void* ptr)
 {
-	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXival)&projectSettings.general.license);
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.general.mail);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectLicense(FXObject*, FXSelector sel, void*)
+{
+	switch (FXSELID(sel))
+	{
+		case ID_PROJECT_LICENSE_NONE:
+			projectSettings.general.license = PROJECT_LICENSE_NONE;
+		break;
+		case ID_PROJECT_LICENSE_GPL:
+			projectSettings.general.license = PROJECT_LICENSE_GPL;
+		break;
+		case ID_PROJECT_LICENSE_LGPL:
+			projectSettings.general.license = PROJECT_LICENSE_LGPL;
+		break;
+		case ID_PROJECT_LICENSE_USER:
+			projectSettings.general.license = PROJECT_LICENSE_USER;
+		break;
+	}
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectLicense(FXObject* sender, FXSelector sel, void* ptr)
+{
+	FXSelector updatemessage = FXSEL(SEL_COMMAND,ID_UNCHECK);
+	switch (FXSELID(sel))
+	{
+		case ID_PROJECT_LICENSE_NONE:
+			if (projectSettings.general.license == PROJECT_LICENSE_NONE) updatemessage = FXSEL(SEL_COMMAND, ID_CHECK);
+		break;
+		case ID_PROJECT_LICENSE_GPL:
+			if (projectSettings.general.license == PROJECT_LICENSE_GPL) updatemessage = FXSEL(SEL_COMMAND, ID_CHECK);
+		break;
+		case ID_PROJECT_LICENSE_LGPL:
+			if (projectSettings.general.license == PROJECT_LICENSE_LGPL) updatemessage = FXSEL(SEL_COMMAND, ID_CHECK);
+		break;
+		case ID_PROJECT_LICENSE_USER:
+			if (projectSettings.general.license == PROJECT_LICENSE_USER) updatemessage = FXSEL(SEL_COMMAND, ID_CHECK);
+		break;
+	}
+
+//	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXival)&projectSettings.general.license);
+	sender->handle(this, updatemessage, NULL);
 	return 1;
 }
 
@@ -763,6 +819,7 @@ long MainWindow::onCmdProjectWriteConfig(FXObject*, FXSelector, void*)
 	config.writeStringEntry("General", "author", projectSettings.general.author.text());
 	config.writeIntEntry("General", "license", projectSettings.general.license);
 	config.writeStringEntry("General", "licenseHeader", projectSettings.general.licenseHeader.text());
+	config.writeStringEntry("General", "mailAddress", projectSettings.general.mail.text());
 	config.unparseFile(projectConfigFile);
 	return 1;
 }
@@ -791,11 +848,23 @@ long MainWindow::onCmdProjectLoadConfig(FXObject*, FXSelector, void*)
 	projectSettings.general.author = config.readStringEntry("General", "author", "");
 	projectSettings.general.license = config.readIntEntry("General", "license", 0);
 	projectSettings.general.licenseHeader = config.readStringEntry("General", "licenseHeader", "");
+	projectSettings.general.mail = config.readStringEntry("General", "mailAddress", "");
 }
 
 
 long MainWindow::onCmdProjectEditConfig(FXObject*, FXSelector, void*)
 {
+	ProjectSettingsDialog dialog(this, "Project settings");
+	do 
+	{
+		if (!dialog.execute(PLACEMENT_OWNER))
+		{
+			return 1;
+		}
+	}
+	while (!dialog.check());
+	handle(this, FXSEL(SEL_COMMAND, ID_PROJECT_WRITECONFIG), NULL);
+	return 1;
 }
 
 

@@ -10,6 +10,7 @@ struct ProjectGeneralSettings {
 	FXString	target;
 	FXString	version;
 	FXString	author;
+	FXString	mail;
 	FXint		license;
 	FXString	licenseHeader;
 };
