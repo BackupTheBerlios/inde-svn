@@ -12,6 +12,7 @@ SettingsDialog::SettingsDialog(MainWindow* owner, const FXString& title)
 :	FXDialogBox(owner, title),
 	tgtBaseDir(baseDir),
 	tgtLoadProject(loadProject),
+	tgtSaveOnTabSwitch(saveOnTabSwitch),
 	tgtFont(font),
 	tgtSyntaxFile(syntaxFile),
 	tgtLineNumbers(lineNumbers),
@@ -29,6 +30,7 @@ SettingsDialog::SettingsDialog(MainWindow* owner, const FXString& title)
 	new FXButton(buttons, "General", NULL, switcher, FXSwitcher::ID_OPEN_FIRST, FRAME_RAISED|ICON_ABOVE_TEXT|LAYOUT_FILL_Y);
 	new FXButton(buttons, "Editor", NULL, switcher, FXSwitcher::ID_OPEN_SECOND, FRAME_RAISED|ICON_ABOVE_TEXT|LAYOUT_FILL_Y);
 	new FXButton(buttons, "Colors", NULL, switcher, FXSwitcher::ID_OPEN_THIRD, FRAME_RAISED|ICON_ABOVE_TEXT|LAYOUT_FILL_Y);
+	new FXButton(buttons, "Saving", NULL, switcher, FXSwitcher::ID_OPEN_FOURTH, FRAME_RAISED|ICON_ABOVE_TEXT|LAYOUT_FILL_Y);
 
 	FXVerticalFrame*	general		= new FXVerticalFrame(switcher, LAYOUT_FILL_X|LAYOUT_FILL_Y);
 	new FXLabel(general, "General settings", NULL, LAYOUT_LEFT);
@@ -55,13 +57,22 @@ SettingsDialog::SettingsDialog(MainWindow* owner, const FXString& title)
 	new FXCheckButton(matrix2, "Yes", &tgtLineNumbers, FXDataTarget::ID_VALUE);
 
 	FXVerticalFrame*	colors		= new FXVerticalFrame(switcher, LAYOUT_FILL_X|LAYOUT_FILL_Y);
-	FXMatrix*			matrix3		= new FXMatrix(colors, 3, MATRIX_BY_COLUMNS|PACK_UNIFORM_HEIGHT|LAYOUT_FILL_X|LAYOUT_FILL_X);
+	new FXLabel(colors, "Color settings", NULL, LAYOUT_LEFT);
+	new FXHorizontalSeparator(colors, SEPARATOR_LINE|LAYOUT_FILL_X);
+	FXMatrix*			matrix3		= new FXMatrix(colors, 3, MATRIX_BY_COLUMNS|PACK_UNIFORM_HEIGHT|LAYOUT_FILL_X|LAYOUT_FILL_Y);
 	new FXLabel(matrix3, "Line numbers:");
 	new FXColorWell(matrix3, FXRGB(0, 0, 0), &tgtNumberColor, FXDataTarget::ID_VALUE, FRAME_SUNKEN|FRAME_THICK|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FILL_ROW,0,0,40,24);
 	new FXColorWell(matrix3, FXRGB(0, 0, 0), &tgtBarColor, FXDataTarget::ID_VALUE, FRAME_SUNKEN|FRAME_THICK|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FILL_ROW,0,0,40,24);
 	new FXLabel(matrix3, "Text:");
 	new FXColorWell(matrix3, FXRGB(0, 0, 0), &tgtForeColor, FXDataTarget::ID_VALUE, FRAME_SUNKEN|FRAME_THICK|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FILL_ROW,0,0,40,24);
 	new FXColorWell(matrix3, FXRGB(0, 0, 0), &tgtBackColor, FXDataTarget::ID_VALUE, FRAME_SUNKEN|FRAME_THICK|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FILL_ROW,0,0,40,24);
+	
+	FXVerticalFrame*	saving		= new FXVerticalFrame(switcher, LAYOUT_FILL_X|LAYOUT_FILL_Y);
+	new FXLabel(saving, "Saving settings", NULL, LAYOUT_LEFT);
+	new FXHorizontalSeparator(saving, SEPARATOR_LINE|LAYOUT_FILL_X);
+	FXMatrix*			matrix4		= new FXMatrix(saving, 3, MATRIX_BY_COLUMNS|PACK_UNIFORM_HEIGHT|LAYOUT_FILL_X|LAYOUT_FILL_Y);
+	new FXLabel(matrix4, "Save when switching documents:");
+	new FXCheckButton(matrix4, "Yes", &tgtSaveOnTabSwitch, FXDataTarget::ID_VALUE);
 
 	new FXHorizontalSeparator(vertical, SEPARATOR_RIDGE|LAYOUT_FILL_X);
   	FXHorizontalFrame* box 			= new FXHorizontalFrame(vertical, LAYOUT_BOTTOM|LAYOUT_FILL_X|PACK_UNIFORM_WIDTH);
@@ -115,15 +126,16 @@ FXbool SettingsDialog::check()
 void SettingsDialog::loadValues()
 {
 	Settings* settings = getOwner()->settings;
-	baseDir 	= settings->getStringValue("baseDir");
-	loadProject = settings->getIntValue("loadProject");
-	font 		= settings->getStringValue("EDITOR", "font");
-	syntaxFile	= settings->getStringValue("EDITOR", "syntaxFile");
-	lineNumbers = settings->getIntValue("EDITOR", "lineNumbers");
-	numberColor	= settings->getColorValue("COLORS", "numberColor");
-	barColor	= settings->getColorValue("COLORS", "barColor");
-	backColor	= settings->getColorValue("COLORS", "backColor");
-	foreColor	= settings->getColorValue("COLORS", "foreColor");
+	baseDir 		= settings->getStringValue("baseDir");
+	loadProject		= settings->getIntValue("loadProject");
+	font 			= settings->getStringValue("EDITOR", "font");
+	syntaxFile		= settings->getStringValue("EDITOR", "syntaxFile");
+	lineNumbers		= settings->getIntValue("EDITOR", "lineNumbers");
+	numberColor		= settings->getColorValue("COLORS", "numberColor");
+	barColor		= settings->getColorValue("COLORS", "barColor");
+	backColor		= settings->getColorValue("COLORS", "backColor");
+	foreColor		= settings->getColorValue("COLORS", "foreColor");
+	saveOnTabSwitch = settings->getIntValue("SAVING", "saveOnTabSwitch");
 }
 
 void SettingsDialog::storeValues()
@@ -138,6 +150,7 @@ void SettingsDialog::storeValues()
 	settings->setColorValue("COLORS", "barColor", barColor);
 	settings->setColorValue("COLORS", "foreColor", foreColor);
 	settings->setColorValue("COLORS", "backColor", backColor);
+	settings->setIntValue("SAVING", "saveOnTabSwitch", saveOnTabSwitch);
 }
 
 void SettingsDialog::run()

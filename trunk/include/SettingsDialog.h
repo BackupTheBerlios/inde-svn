@@ -40,6 +40,8 @@ class SettingsDialog : public FXDialogBox
 	private:
 		FXDataTarget	tgtBaseDir;
 		FXDataTarget	tgtLoadProject;
+		
+		FXDataTarget	tgtSaveOnTabSwitch;
 
 		FXDataTarget	tgtFont;
 		FXDataTarget	tgtSyntaxFile;

@@ -13,6 +13,7 @@ FXDEFMAP(TabEditor) TabEditorMap[] = {
 	FXMAPFUNC(SEL_INSERTED,				TabEditor::ID_DOCUMENT,		TabEditor::onTextInserted),
 	FXMAPFUNC(SEL_REPLACED,				TabEditor::ID_DOCUMENT,		TabEditor::onTextReplaced),
 	FXMAPFUNC(SEL_DELETED,				TabEditor::ID_DOCUMENT,		TabEditor::onTextDeleted),
+	FXMAPFUNC(SEL_COMMAND,				FXTabBar::ID_OPEN_ITEM,		TabEditor::onSwitchItem),
 };
 
 FXIMPLEMENT(TabEditor, FXTabBook, TabEditorMap, ARRAYNUMBER(TabEditorMap))
@@ -537,6 +538,7 @@ void TabEditor::showLineNumbers(FXbool flag)
 void TabEditor::showNextTab()
 {
 	FXTRACE((1, "TabEditor::showNextTab()\n"));
+	tabSwitched();
 	if (getCurrent() < 0)
 	{
 		return;
@@ -554,6 +556,7 @@ void TabEditor::showNextTab()
 void TabEditor::showPreviousTab()
 {
 	FXTRACE((1, "TabEditor::showPreviousTab()\n"));
+	tabSwitched();
 	if (getCurrent() <= 0)
 	{
 		return;
@@ -587,4 +590,24 @@ void TabEditor::applySettingsTo(FXuint index)
 	doc->setBarColor(reg->getColorValue("COLORS", "barColor"));
 	doc->setTextColor(reg->getColorValue("COLORS", "foreColor"));
 	doc->setBackColor(reg->getColorValue("COLORS", "backColor"));
+}
+
+long TabEditor::onSwitchItem(FXObject* sender, FXSelector sel, void* ptr)
+{
+	FXTRACE((1, "TabEditor::onSwitchItem()\n"));
+	tabSwitched();
+	FXTabBook::handle(sender, FXSEL(SEL_COMMAND, sel), ptr);
+	return 1;
+}
+
+void TabEditor::tabSwitched()
+{
+	FXTRACE((1, "TabEditor::tabSwitched()\n"));
+	if (mainWin->settings->getIntValue("SAVING", "saveOnTabSwitch"))
+	{
+		if (!saveDocument(getCurrent()))
+		{
+			FXTRACE((1, "Document could not be saved.\n"));
+		}
+	}
 }

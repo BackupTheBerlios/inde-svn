@@ -56,6 +56,7 @@ class TabEditor : public FXTabBook
 		long onTextReplaced(FXObject*, FXSelector, void*);
 		long onTextChanged(FXObject*, FXSelector, void*);
 		long onTextDeleted(FXObject*, FXSelector, void*);
+		long onSwitchItem(FXObject*, FXSelector, void*);
 
 	public:
 
@@ -238,11 +239,11 @@ class TabEditor : public FXTabBook
 
 		/*
 			Function: restyleDocument
-			
+
 			Restyles part of the document at index
 		*/
 		void restyleDocument(FXuint index, FXint pos, FXint del, FXint ins);
-		
+
 		/*
 			Function: restyleDocument
 
@@ -285,6 +286,14 @@ class TabEditor : public FXTabBook
 			them to document at given index
 		*/
 		void applySettingsTo(FXuint index);
+		
+		/*
+			Function: tabSwitched()
+			
+			Internal function to react before a new tab is opened
+		*/
+	private:
+		void tabSwitched();	
 };
 
 #endif

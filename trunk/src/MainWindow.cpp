@@ -378,6 +378,7 @@ void MainWindow::readSettings()
 	settings->setDefaultColor("COLORS", "backColor", FXRGB(255, 255, 255));
 	settings->setDefaultColor("COLORS", "numberColor", FXRGB(100, 100, 100));
 	settings->setDefaultColor("COLORS", "barColor", FXRGB(220, 220, 220));
+	settings->setDefault("SAVING", "saveOnTabSwitch", true);
 	settings->parse();
 }
 
@@ -419,7 +420,7 @@ FXbool MainWindow::openProject(const FXString& location)
 			}
 		}
 	}
-		
+
 	if (FXFile::isDirectory(target+"/"))
 	{
 		name = FXFile::name(target);

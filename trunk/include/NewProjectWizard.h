@@ -20,7 +20,7 @@ class NewProjectWizard : public FXWizard  {
 
 	public:
 		FXString		type;
-		
+
 		FXString		name;
 		FXString		description;
 		FXString		target;
@@ -29,15 +29,15 @@ class NewProjectWizard : public FXWizard  {
 		FXString		mail;
 		FXint			license;
 		FXString		licenseHeader;
-		
+
 		FXString		includePaths;
 		FXString		libraryPaths;
 		FXString		libraries;
-		
+
 		FXString		srcDir;
 		FXString		includeDir;
 		FXString		buildDir;
-		
+
 		FXString		warnings;
 		FXString		defines;
 		FXString		switches;
@@ -46,20 +46,20 @@ class NewProjectWizard : public FXWizard  {
 
 	private:
 		FXDataTarget	tgtType;
-		
+
 		FXDataTarget	tgtName;
 		FXDataTarget	tgtDescription;
 		FXDataTarget	tgtTarget;
 		FXDataTarget	tgtVersion;
-		
+
 		FXDataTarget	tgtIncludePaths;
 		FXDataTarget	tgtLibraryPaths;
 		FXDataTarget	tgtLibraries;
-		
+
 		FXDataTarget	tgtSrcDir;
 		FXDataTarget	tgtIncludeDir;
 		FXDataTarget	tgtBuildDir;
-		
+
 		FXDataTarget	tgtWarnings;
 		FXDataTarget	tgtDefines;
 		FXDataTarget	tgtSwitches;
@@ -70,7 +70,7 @@ class NewProjectWizard : public FXWizard  {
 		FXDataTarget	tgtMail;
 		FXDataTarget	tgtLicense;
 		FXDataTarget	tgtLicenseHeader;
-	
+
 	private:
 
 		FXVerticalFrame* step1;
@@ -92,42 +92,42 @@ class NewProjectWizard : public FXWizard  {
 
 	public:
 		long onCmdSelectLicenseHeader(FXObject*, FXSelector, void*);
-				
+
 	public:
-	
+
 		/*
 			Constructor: NewProjectWizard
 		*/
 		NewProjectWizard(MainWindow* owner, const FXString& name);
-		
+
 		/*
-			Function: Create
+			Function: create
 		*/
 		virtual void create();
-		
+
 		/*
 			Destructor: ~NewProjectWizard
 		*/
 		virtual ~NewProjectWizard();
-		
+
 		/*
 			Function: check
 
-			checks if the user provided us with the needed information
+			Checks if the user provided us with the needed information
 		*/
 		FXbool check();
 
 		/*
 			Function: run
 
-			starts execution of NewProjectWizard
+			Starts execution of NewProjectWizard
 		*/
 		void run();
 
 		/*
 			Function: storeValues
 
-			saves the project settings
+			Saves the project settings
 		*/
 		void storeValues();
 
