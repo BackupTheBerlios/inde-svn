@@ -118,6 +118,9 @@ class MainWindow : public FXMainWindow
 		// Save settings
 		void saveSettings();
 		
+		// Get pointer to the settings struct
+		InDESettings* getSettings();
+		
 };
 
 

@@ -157,6 +157,24 @@ MainWindow::~MainWindow()
 }
 
 
+void MainWindow::loadSettings()
+{
+	this->handle(this, FXSEL(SEL_COMMAND, MainWindow::ID_LOADSETTINGS), NULL);
+}
+
+
+void MainWindow::saveSettings()
+{
+	this->handle(this, FXSEL(SEL_COMMAND, MainWindow::ID_SAVESETTINGS), NULL);
+}
+
+
+InDESettings* MainWindow::getSettings()
+{
+	return &settings;
+}
+
+
 long MainWindow::onCmdQuit(FXObject*, FXSelector, void*)
 {
 	saveSettings();
@@ -173,18 +191,6 @@ long MainWindow::onCmdNew(FXObject*, FXSelector, void*)
 long MainWindow::onCmdNewProject(FXObject*, FXSelector, void*)
 {
 	return 1;
-}
-
-
-void MainWindow::loadSettings()
-{
-	this->handle(this, FXSEL(SEL_COMMAND, MainWindow::ID_LOADSETTINGS), NULL);
-}
-
-
-void MainWindow::saveSettings()
-{
-	this->handle(this, FXSEL(SEL_COMMAND, MainWindow::ID_SAVESETTINGS), NULL);
 }
 
 
