@@ -494,7 +494,7 @@ void TabEditor::restyleDocument(FXuint index)
 long TabEditor::onTextInserted(FXObject* sender, FXSelector, void* ptr)
 {
 	FXTRACE((1, "TabEditor::onTextInserted()\n"));
-	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent());
+	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent()) / 2;
 	((Edit*)sender)->setModified();
 	const FXTextChange* change = (const FXTextChange*)ptr;
 	restyleDocument(index, change->pos,change->ndel,change->nins);
@@ -505,7 +505,7 @@ long TabEditor::onTextInserted(FXObject* sender, FXSelector, void* ptr)
 long TabEditor::onTextReplaced(FXObject* sender, FXSelector, void* ptr)
 {
 	FXTRACE((1, "TabEditor::onTextReplaced()\n"));
-	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent())-1;
+	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent()) / 2;
 	((Edit*)sender)->setModified();
 	const FXTextChange* change = (const FXTextChange*)ptr;
 	restyleDocument(index, change->pos,change->ndel,change->nins);
@@ -515,7 +515,7 @@ long TabEditor::onTextReplaced(FXObject* sender, FXSelector, void* ptr)
 
 long TabEditor::onTextChanged(FXObject* sender, FXSelector, void*)
 {
-	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent())-1;
+	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent()) / 2;
 	Edit* edit = (Edit*)sender;
 	return 1;
 }
@@ -524,7 +524,7 @@ long TabEditor::onTextChanged(FXObject* sender, FXSelector, void*)
 long TabEditor::onTextDeleted(FXObject* sender, FXSelector, void* ptr)
 {
 	FXTRACE((1, "TabEditor::onTextDeleted()\n"));
-	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent())-1;
+	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent()) / 2;
 	((Edit*)sender)->setModified();
 	const FXTextChange* change = (const FXTextChange*)ptr;
 	restyleDocument(index, change->pos,change->ndel,change->nins);

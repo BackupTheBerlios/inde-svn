@@ -219,7 +219,12 @@ FXbool NewClassDialog::check()
 
 		if (!FXFile::exists(headerfile+headerName))
 		{
+			FXTRACE((1, "Creating header file '%s'...\n", FXString(headerfile+headerName).text()));
 			FXFile::createFile(headerfile+headerName, 0644);
+			if (FXFile::exists(headerfile+headerName))
+			{
+				FXTRACE((1, "... done.\n"));
+			}
 			mw->projectBrowser->addFile(settings->getProjectName(), headerName, incDir, headerType);
 			settings->appendStringValue("FILES", incKey, headerName);
 		}
