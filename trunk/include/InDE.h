@@ -19,6 +19,8 @@
 #include "Hilite.h"
 #include "SyntaxParser.h"
 #include "InDESettings.h"
+#include "ProjectSettings.h"
+#include "NewProjectWizard.h"
 #include "DialogTitle.h"
 #include "SettingsDialog.h"
 #include "MainWindow.h"
