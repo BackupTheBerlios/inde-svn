@@ -2,6 +2,7 @@
 #include "TabItem.h"
 #include <fstream>
 #include <fxkeys.h>
+#include "AddToProjectDialog.h"
 
 #define RESTYLEJUMP     80
 
@@ -278,6 +279,18 @@ FXbool TabEditor::saveDocumentAs(FXuint index)
 	}
 	edit->setFilename(target);
 	edit->setModified(false);
+	
+	// add file to project
+	FXWindow *mainWindow = getOwner();
+	while (!dynamic_cast<MainWindow*>(mainWindow))
+		mainWindow = mainWindow->getOwner();
+	MainWindow *mw = dynamic_cast<MainWindow*>(mainWindow);
+	if (mw->projects.no() > 0)
+	{
+		AddToProjectDialog projectDialog(this, "Add file to project?");
+		projectDialog.run(target);
+	}
+
 	return true;
 }
 

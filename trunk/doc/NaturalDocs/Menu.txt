@@ -31,6 +31,7 @@ Format: 1.34
 
 
 File: AboutDialog  (AboutDialog.h)
+File: AddToProjectDialog.h  (AddToProjectDialog.h)
 File: DialogTitle  (DialogTitle.h)
 File: Edit  (Edit.h)
 File: FileBrowser  (FileBrowser.h)

@@ -1,3 +1,23 @@
+/*
+ * InDE - Fast, pragmatic C++ IDE
+ * Copyright (C) 2005 	InDE Development Team
+ *						see AUTHOR file for more information
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
 #include "NewProjectWizard.h"
 
 class MainWindow;
@@ -32,6 +52,8 @@ NewProjectWizard::NewProjectWizard(MainWindow* owner, const FXString& name)
 	tgtSrcDir(srcDir),
 	tgtIncludeDir(includeDir),
 	tgtBuildDir(buildDir),
+	tgtDocDir(docDir),
+	tgtRessourceDir(ressourceDir),
 	tgtWarnings(warnings),
 	tgtDefines(defines),
 	tgtSwitches(switches),
@@ -41,9 +63,11 @@ NewProjectWizard::NewProjectWizard(MainWindow* owner, const FXString& name)
 	tgtMail(mail),
 	tgtLicense(license),
 	tgtLicenseHeader(licenseHeader),
-	srcDir("src/"),
-	includeDir("include/"),
-	buildDir("build/"),
+	srcDir("src"),
+	includeDir("include"),
+	buildDir("build"),
+	docDir("doc"),
+	ressourceDir("ressources"),
 	license(PROJECT_LICENSE_GPL),
 	debug(1),
 	pic(0)
@@ -84,6 +108,10 @@ NewProjectWizard::NewProjectWizard(MainWindow* owner, const FXString& name)
 	new FXTextField(step2, 60, &tgtIncludeDir, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
 	new FXLabel(step2, "Build directory:");
 	new FXTextField(step2, 60, &tgtBuildDir, FXDataTarget::ID_VALUE);
+	new FXLabel(step2, "Documentation directory:");
+	new FXTextField(step2, 60, &tgtDocDir, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
+	new FXLabel(step2, "Ressource directory:");
+	new FXTextField(step2, 60, &tgtRessourceDir, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
 
 	// Step 3: Libraries and path settings
 	step3 = new FXVerticalFrame(getContainer(), LAYOUT_FILL_X|LAYOUT_FILL_Y);
@@ -222,41 +250,59 @@ void NewProjectWizard::run()
 void NewProjectWizard::storeValues()
 {
 	FXString conffile;
+	FXString path;
 #ifdef WIN32
-	conffile = FXString(((MainWindow*)(getOwner()))->settings->getStringValue("baseDir")) + "\\" +  name + "\\project.inde";
+	path = FXString(((MainWindow*)(getOwner()))->settings->getStringValue("baseDir")) + "\\" +  name + "\\";
+	conffile = path + "project.inde";
 #else
-	conffile = FXString(((MainWindow*)(getOwner()))->settings->getStringValue("baseDir")) + "/" +  name + "/project.inde";
+	path = FXString(((MainWindow*)(getOwner()))->settings->getStringValue("baseDir")) + "/" +  name + "/";
+	conffile = path + "project.inde";
 #endif
 
 	ProjectSettings* settings = new ProjectSettings(conffile, name);
 	settings->parse();
 
-	settings->setStringValue("GENERAL", "type", 		type);
-	settings->setStringValue("GENERAL", "name", 		name);
-	settings->setStringValue("GENERAL", "description", 	description);
-	settings->setStringValue("GENERAL", "target", 		target);
-	settings->setStringValue("GENERAL", "version", 		version);
-	settings->setStringValue("GENERAL", "author", 		author);
-	settings->setStringValue("GENERAL", "mail", 		mail);
-	settings->setIntValue	("GENERAL", "license", 		license);
-	settings->setStringValue("GENERAL", "licenseHeader",licenseHeader);
+	settings->setStringValue("GENERAL", "type", 			type);
+	settings->setStringValue("GENERAL", "name", 			name);
+	settings->setStringValue("GENERAL", "description", 		description);
+	settings->setStringValue("GENERAL", "target", 			target);
+	settings->setStringValue("GENERAL", "version",	 		version);
+	settings->setStringValue("GENERAL", "author", 			author);
+	settings->setStringValue("GENERAL", "mail", 			mail);
+	settings->setIntValue	("GENERAL", "license",	 		license);
+	settings->setStringValue("GENERAL", "licenseHeader",	licenseHeader);
 
-	settings->setStringValue("LIBRARY", "includePaths", includePaths);
-	settings->setStringValue("LIBRARY", "libraryPaths", libraryPaths);
-	settings->setStringValue("LIBRARY", "libraries", 	libraries);
+	settings->setStringValue("LIBRARY", "includePaths",	 	includePaths);
+	settings->setStringValue("LIBRARY", "libraryPaths", 	libraryPaths);
+	settings->setStringValue("LIBRARY", "libraries", 		libraries);
 	
-	settings->setStringValue("DIRECTORY", "sourceDir", 	srcDir);
-	settings->setStringValue("DIRECTORY", "includeDir", includeDir);
-	settings->setStringValue("DIRECTORY", "buildDir", 	buildDir);
+	settings->setStringValue("DIRECTORY", "sourceDir", 		srcDir);
+	settings->setStringValue("DIRECTORY", "includeDir", 	includeDir);
+	settings->setStringValue("DIRECTORY", "buildDir", 		buildDir);
+	settings->setStringValue("DIRECTORY", "docDir", 		docDir);
+	settings->setStringValue("DIRECTORY", "ressourceDir", 	ressourceDir);
+	settings->setStringValue("FILES", 	  "root", 			"");	// default value
 	
-	settings->setStringValue("COMPILER", "warnings", 	warnings);
-	settings->setStringValue("COMPILER", "defines", 	defines);
-	settings->setStringValue("COMPILER", "switches", 	switches);
-	settings->setIntValue	("COMPILER", "debug", 		debug);
-	settings->setIntValue	("COMPILER", "pic", 		pic);
+	settings->setStringValue("COMPILER", "warnings", 		warnings);
+	settings->setStringValue("COMPILER", "defines", 		defines);
+	settings->setStringValue("COMPILER", "switches", 		switches);
+	settings->setIntValue	("COMPILER", "debug", 			debug);
+	settings->setIntValue	("COMPILER", "pic", 			pic);
 
 	settings->write();
 	((MainWindow*)(getOwner()))->projects.append(settings);
 	((MainWindow*)(getOwner()))->projectBrowser->addProject(name);
+
+	// create directories
+	FXFile::createDirectory(path + srcDir, 0775);
+	FXFile::createDirectory(path + includeDir, 0775);
+	FXFile::createDirectory(path + buildDir, 0775);
+	FXFile::createDirectory(path + docDir, 0775);
+	FXFile::createDirectory(path + ressourceDir, 0775);
+	((MainWindow*)(getOwner()))->projectBrowser->addDir(name, srcDir, ProjectBrowser::SOURCE);
+	((MainWindow*)(getOwner()))->projectBrowser->addDir(name, includeDir, ProjectBrowser::INCLUDE);
+	((MainWindow*)(getOwner()))->projectBrowser->addDir(name, docDir, ProjectBrowser::DOC);
+	((MainWindow*)(getOwner()))->projectBrowser->addDir(name, ressourceDir, ProjectBrowser::RESSOURCE);
+
 }
 

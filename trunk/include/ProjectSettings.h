@@ -1,7 +1,28 @@
+/*
+ * InDE - Fast, pragmatic C++ IDE
+ * Copyright (C) 2005 	InDE Development Team
+ *						see AUTHOR file for more information
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
 #ifndef PROJECTSETTINGS_H
 #define PROJECTSETTINGS_H
 
 #include <fx.h>
+#include "Settings.h"
 
 
 /*
@@ -14,7 +35,7 @@
 	- Fill missing values with defaults
 	- Replace all values with defaults
 */
-class ProjectSettings : public FXSettings
+class ProjectSettings : public Settings
 {
 	FXDECLARE(ProjectSettings)
 
@@ -22,11 +43,10 @@ class ProjectSettings : public FXSettings
 		ProjectSettings() {};
 
 	private:
-		FXString		file;
-		FXSettings*		defaultDict;
 		FXString		name;
 
 	public:
+		static const FXchar SEPARATOR = ',';
 
 	public:
 
@@ -38,117 +58,22 @@ class ProjectSettings : public FXSettings
 		*/
 		ProjectSettings(const FXString& filename, const FXString& projectname);
 
+		/*
+			Destructor: ~ProjectSettings
+		*/
 		virtual ~ProjectSettings();
 
+		/*
+			Function: getProjectName
+		*/
 		FXString getProjectName() { return name; }
-		/*
-			Function: parse
-
-			Parses the settings file
-
-			- Creates settings file if it doesn't already exist
-			  and writes default values to it
-			- Parses the settings file
-			- Fills missing values with defaults
-		*/
-		void parse();
-
-		void unparse();
 
 		/*
-			Function: defaults
+			Function: appendStringValue
 
-			Method to either fill missing values or to replace all
-			values with defaults
-
-			Parameters:
-				replace - Replace existing values
+			Appends a String value to an existing String value
 		*/
-		void defaults(FXbool replace=true);
-
-		/*
-			Function: write
-
-			Writes settings to the file
-		*/
-		void write();
-
-
-		/*
-			Function: getStringValue
-
-			Returns string value of a key in section "GENERAL"
-		*/
-		const FXchar* getStringValue(const FXString& key);
-
-		/*
-			Function: getStringValue
-
-			Returns string value of a given key in a section
-		*/
-		const FXchar* getStringValue(const FXString& section, const FXString& key);
-
-		/*
-			Function: getIntValue
-
-			Returns integer value of a key in section "GENERAL"
-		*/
-		FXint getIntValue(const FXString& key);
-
-		/*
-			Function: getIntValue
-
-			Returns integer value of a key in a section
-		*/
-		FXint getIntValue(const FXString& section, const FXString& key);
-
-		/*
-			Function: setStringValue
-
-			Defines a string value for a key in "GENERAL"
-		*/
-		void setStringValue(const FXString& key, const FXString& value);
-
-		/*
-			Function: setStringValue
-
-			Defines a string value for a key in a section
-		*/
-		void setStringValue(const FXString& section, const FXString& key, const FXString& value);
-
-		/*
-			Function: setIntValue
-
-			Defines an integer value for a key in "GENERAL"
-		*/
-		void setIntValue(const FXString& key, FXint value);
-
-		/*
-			Function: setIntValue
-
-			Defines an integer value for a key in a section
-		*/
-		void setIntValue(const FXString& section, const FXString& key, FXint value);
-		
-		/*
-			Function: setFormatValue
-		*/
-		void setFormatValue(const FXString& key, const FXchar* format, ...);
-		
-		/*
-			Function: setFormatValue
-		*/
-		void setFormatValue(const FXString& section, const FXString& key, const FXchar* format, ...);
-		
-		/*
-			Function: getFormatValue
-		*/
-		FXint getFormatValue(const FXString& key, const FXchar* format, ...);
-		
-		/*
-			Function: getFormatValue
-		*/
-		FXint getFormatValue(const FXString& section, const FXString& key, const FXchar* format, ...);
+		void appendStringValue(const FXString& section, const FXString& key, const FXString& value);
 
 };
 

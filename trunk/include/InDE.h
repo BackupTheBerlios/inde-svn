@@ -18,6 +18,12 @@
 #include <signal.h>
 #include "MainWindow.h"
 
+#ifdef WIN32	// Win32
+#define DIR_SEPARATOR	'\\'
+#else			// Unix
+#define DIR_SEPARATOR	'/'
+#endif // WIN32
+
 class MainWindow;
 
 /*

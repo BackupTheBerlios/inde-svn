@@ -20,7 +20,7 @@ class Settings : public FXSettings
 	protected:
 		Settings() {};
 
-	private:
+	protected:
 		FXString		file;
 		FXSettings*		defaultDict;
 

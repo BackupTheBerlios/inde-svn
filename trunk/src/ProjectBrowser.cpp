@@ -1,3 +1,23 @@
+/*
+ * InDE - Fast, pragmatic C++ IDE
+ * Copyright (C) 2005 	InDE Development Team
+ *						see AUTHOR file for more information
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
 #include "ProjectBrowser.h"
 #include "StringTokenizer.h"
 
@@ -95,7 +115,11 @@ void ProjectBrowser::addFile(FXString project, FXString name, FXString dir, File
 {
 	FXTreeItem* root = projectTree->findItem(project);
 	if (!root) return;
-	FXTreeItem* sub = projectTree->findItem(dir, root);
+	FXTreeItem* sub;
+	if (dir != "")
+		sub = projectTree->findItem(dir, root);
+	else
+		sub = root;
 	if (!sub) return;
 	// add file icons
 	FXTreeItem* file = new FXTreeItem(name, NULL, NULL);
@@ -150,7 +174,7 @@ void ProjectBrowser::addDir(FXString project, FXString dirname, DirType type)
 	FXTreeItem* root = projectTree->findItem(project);
 	if (!root) return;
 	// add directory icons
-	FXTreeItem* dir = new FXTreeItem(dirname.remove(dirname.length()-1), NULL, NULL);
+	FXTreeItem* dir = new FXTreeItem(dirname, NULL, NULL);
 	projectTree->appendItem(root, dir);
 }
 
@@ -226,6 +250,12 @@ void ProjectBrowser::openProject(ProjectSettings* settings)
 	FXString include = settings->getStringValue("DIRECTORY", "includeDir");
 	if (include != "")
 		addDir(project, include, INCLUDE);
+	FXString ressource = settings->getStringValue("DIRECTORY", "ressourceDir");
+	if (ressource != "")
+		addDir(project, ressource, RESSOURCE);
+	FXString doc = settings->getStringValue("DIRECTORY", "docDir");
+	if (doc != "")
+		addDir(project, doc, DOC);
 
 	FXString type = settings->getStringValue("GENERAL", "type");
 	if (type == "C/C++")
@@ -237,7 +267,7 @@ void ProjectBrowser::openProject(ProjectSettings* settings)
 	FXString sourceList = settings->getStringValue("FILES", "source");
 	if (sourceList != "")
 	{
-		strtok->reinit(sourceList, ',');
+		strtok->reinit(sourceList, ProjectSettings::SEPARATOR);
 		FXString token;
 		while ((token = strtok->getNextToken()) != "")
 			addFile(project, token, source, sourceType);
@@ -246,13 +276,40 @@ void ProjectBrowser::openProject(ProjectSettings* settings)
 	FXString includeList = settings->getStringValue("FILES", "include");
 	if (includeList != "")
 	{
-		strtok->reinit(includeList, ',');
+		strtok->reinit(includeList, ProjectSettings::SEPARATOR);
 		FXString token;
 		while ((token = strtok->getNextToken()) != "")
 			addFile(project, token, include, includeType);
 	}
 
-	settings->unparse();
+	FXString ressourceList = settings->getStringValue("FILES", "ressource");
+	if (ressourceList != "")
+	{
+		strtok->reinit(ressourceList, ProjectSettings::SEPARATOR);
+		FXString token;
+		while ((token = strtok->getNextToken()) != "")
+			addFile(project, token, ressource, RESSOURCE_FILE);
+	}
+
+	FXString docList = settings->getStringValue("FILES", "doc");
+	if (docList != "")
+	{
+		strtok->reinit(docList, ProjectSettings::SEPARATOR);
+		FXString token;
+		while ((token = strtok->getNextToken()) != "")
+			addFile(project, token, doc, TEXT);
+	}
+
+	FXString rootList = settings->getStringValue("FILES", "root");
+	if (rootList != "")
+	{
+		strtok->reinit(rootList, ProjectSettings::SEPARATOR);
+		FXString token;
+		while ((token = strtok->getNextToken()) != "")
+			addFile(project, token, "", TEXT);
+	}
+
+	settings->write();	// unparse
 	delete strtok;
 }
 

@@ -1,3 +1,23 @@
+/*
+ * InDE - Fast, pragmatic C++ IDE
+ * Copyright (C) 2005 	InDE Development Team
+ *						see AUTHOR file for more information
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
 #include "ProjectSettingsDialog.h"
 #include "DialogTitle.h"
 
@@ -29,6 +49,8 @@ ProjectSettingsDialog::ProjectSettingsDialog(MainWindow* owner, const FXString& 
 	tgtSrcDir(srcDir),
 	tgtIncludeDir(includeDir),
 	tgtBuildDir(buildDir),
+	tgtDocDir(docDir),
+	tgtRessourceDir(ressourceDir),
 	tgtWarnings(warnings),
 	tgtDefines(defines),
 	tgtSwitches(switches),
@@ -99,6 +121,10 @@ ProjectSettingsDialog::ProjectSettingsDialog(MainWindow* owner, const FXString& 
 	new FXTextField(frm, 60, &tgtLibraryPaths, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
 	new FXLabel(frm, "Libraries to link with (comma separated list, without suffix and prefix):");
 	new FXTextField(frm, 60, &tgtLibraries, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
+	new FXLabel(frm, "Documentation directory:");
+	new FXTextField(frm, 60, &tgtDocDir, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
+	new FXLabel(frm, "Ressource directory:");
+	new FXTextField(frm, 60, &tgtRessourceDir, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
 
 	// Compiler and linker options
 	frm = new FXVerticalFrame(switcher, LAYOUT_FILL_X|LAYOUT_FILL_Y);
@@ -233,6 +259,8 @@ void ProjectSettingsDialog::loadValues()
 	srcDir = 		settings->getStringValue("DIRECTORY", "sourceDir");
 	includeDir = 	settings->getStringValue("DIRECTORY", "includeDir");
 	buildDir = 		settings->getStringValue("DIRECTORY", "buildDir");
+	docDir = 		settings->getStringValue("DIRECTORY", "docDir");
+	ressourceDir =	settings->getStringValue("DIRECTORY", "ressourceDir");
 	
 	warnings = 		settings->getStringValue("COMPILER", "warnings");
 	defines = 		settings->getStringValue("COMPILER", "defines");
@@ -246,29 +274,31 @@ void ProjectSettingsDialog::loadValues()
 // storeValues
 void ProjectSettingsDialog::storeValues()
 {
-	settings->setStringValue("GENERAL", "type", 		type);
-	settings->setStringValue("GENERAL", "name", 		name);
-	settings->setStringValue("GENERAL", "description", 	description);
-	settings->setStringValue("GENERAL", "target", 		target);
-	settings->setStringValue("GENERAL", "version", 		version);
-	settings->setStringValue("GENERAL", "author", 		author);
-	settings->setStringValue("GENERAL", "mail", 		mail);
-	settings->setIntValue	("GENERAL", "license", 		license);
-	settings->setStringValue("GENERAL", "licenseHeader",licenseHeader);
+	settings->setStringValue("GENERAL", "type", 			type);
+	settings->setStringValue("GENERAL", "name", 			name);
+	settings->setStringValue("GENERAL", "description", 		description);
+	settings->setStringValue("GENERAL", "target", 			target);
+	settings->setStringValue("GENERAL", "version", 			version);
+	settings->setStringValue("GENERAL", "author", 			author);
+	settings->setStringValue("GENERAL", "mail", 			mail);
+	settings->setIntValue	("GENERAL", "license", 			license);
+	settings->setStringValue("GENERAL", "licenseHeader",	licenseHeader);
 
-	settings->setStringValue("LIBRARY", "includePaths", includePaths);
-	settings->setStringValue("LIBRARY", "libraryPaths", libraryPaths);
-	settings->setStringValue("LIBRARY", "libraries", 	libraries);
+	settings->setStringValue("LIBRARY", "includePaths", 	includePaths);
+	settings->setStringValue("LIBRARY", "libraryPaths", 	libraryPaths);
+	settings->setStringValue("LIBRARY", "libraries", 		libraries);
 	
-	settings->setStringValue("DIRECTORY", "sourceDir", 	srcDir);
-	settings->setStringValue("DIRECTORY", "includeDir", includeDir);
-	settings->setStringValue("DIRECTORY", "buildDir", 	buildDir);
+	settings->setStringValue("DIRECTORY", "sourceDir", 		srcDir);
+	settings->setStringValue("DIRECTORY", "includeDir", 	includeDir);
+	settings->setStringValue("DIRECTORY", "buildDir", 		buildDir);
+	settings->setStringValue("DIRECTORY", "docDir", 		docDir);
+	settings->setStringValue("DIRECTORY", "ressourceDir", 	ressourceDir);
 	
-	settings->setStringValue("COMPILER", "warnings", 	warnings);
-	settings->setStringValue("COMPILER", "defines", 	defines);
-	settings->setStringValue("COMPILER", "switches", 	switches);
-	settings->setIntValue	("COMPILER", "debug", 		debug);
-	settings->setIntValue	("COMPILER", "pic", 		pic);
+	settings->setStringValue("COMPILER", "warnings", 		warnings);
+	settings->setStringValue("COMPILER", "defines", 		defines);
+	settings->setStringValue("COMPILER", "switches", 		switches);
+	settings->setIntValue	("COMPILER", "debug", 			debug);
+	settings->setIntValue	("COMPILER", "pic", 			pic);
 
 	settings->write();
 }

@@ -20,12 +20,12 @@ void Settings::parse()
 	if (!FXFile::exists(FXFile::directory(file)))
 	{
 		FXTRACE((1, "Settings::parse(): Creating directory ~/.InDE\n"));
-		FXFile::createDirectory(FXFile::directory(file), 0777);
+		FXFile::createDirectory(FXFile::directory(file), 0775);
 	}
 	if (!FXFile::exists(file))
 	{
 		FXTRACE((1, "Settings::parse(): Creating user file\n"));
-		FXFile::createFile(file, 0777);
+		FXFile::createFile(file, 0664);
 		defaults();
 		write();
 	}

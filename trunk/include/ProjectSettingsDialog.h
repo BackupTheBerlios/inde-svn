@@ -1,3 +1,23 @@
+/*
+ * InDE - Fast, pragmatic C++ IDE
+ * Copyright (C) 2005 	InDE Development Team
+ *						see AUTHOR file for more information
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
 #ifndef PROJECTSETTINGSDIALOG_H
 #define PROJECTSETTINGSDIALOG_H
 
@@ -42,6 +62,8 @@ class ProjectSettingsDialog : public FXDialogBox
 		FXString		srcDir;
 		FXString		includeDir;
 		FXString		buildDir;
+		FXString		docDir;
+		FXString		ressourceDir;
 		
 		FXString		warnings;
 		FXString		defines;
@@ -64,6 +86,8 @@ class ProjectSettingsDialog : public FXDialogBox
 		FXDataTarget	tgtSrcDir;
 		FXDataTarget	tgtIncludeDir;
 		FXDataTarget	tgtBuildDir;
+		FXDataTarget	tgtDocDir;
+		FXDataTarget	tgtRessourceDir;
 		
 		FXDataTarget	tgtWarnings;
 		FXDataTarget	tgtDefines;
