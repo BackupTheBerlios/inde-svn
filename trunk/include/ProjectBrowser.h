@@ -32,12 +32,14 @@
 	ProjectBrowser is a special FXTreeList like Widget, which provides 
 	some functionality to easyly add new projects and files to its view.
 */
-class ProjectBrowser : public FXComposite 
+class ProjectBrowser : public FXVerticalFrame 
 {
 	FXDECLARE(ProjectBrowser)
 
 	private:
 		FXTreeList		*projectTree;
+
+		MainWindow*		mainWin;
 
 	protected:
 		ProjectBrowser() {}
@@ -59,10 +61,17 @@ class ProjectBrowser : public FXComposite
 		};
 
 	public:
+		enum {
+			ID_BROWSER = FXComposite::ID_LAST,
+		};
+
+		long onDoubleClick(FXObject*, FXSelector, void*);
+
+	public:
 		/*
 			Constructor: ProjectBrowser
 		*/
-		ProjectBrowser(FXComposite *p, FXObject *tgt = NULL, FXSelector sel = 0, FXuint opts = 0, FXint x = 0, FXint y = 0, FXint w = 0, FXint h = 0);
+		ProjectBrowser(FXComposite* p, MainWindow* win, FXObject* tgt=NULL, FXSelector sel=0, FXuint opts=FRAME_LINE|LAYOUT_FILL_X|LAYOUT_FILL_Y);
 
 		/*
 			Destructor: ~ProjectBrowser
@@ -74,46 +83,6 @@ class ProjectBrowser : public FXComposite
 			Function: create
 		*/
 		void 	create();
-		/*
-			Function: detach
-		*/
-		void 	detach();
-		/*
-			Function: layout
-		*/
-		void 	layout();
-		/*
-			Function: getDefaultWidth
-		*/
-		FXint 	getDefaultWidth();
-		/*
-			Function: getDefautHeight
-		*/
-		FXint 	getDefaultHeight();
-		/*
-			Function: getContentWidth
-		*/
-		FXint 	getContentWidth();
-		/*
-			Function: getContentHeight
-		*/
-		FXint 	getContentHeight();
-		/*
-			Function: recalc
-		*/
-		void 	recalc();
-		/*
-			Function: canFocus
-		*/
-		FXbool 	canFocus() const;
-		/*
-			Function: setFocus
-		*/
-		void 	setFocus();
-		/*
-			Function: killFocus
-		*/
-		void 	killFocus();
 	
 
 		// working operations
@@ -189,6 +158,13 @@ class ProjectBrowser : public FXComposite
 			opens project settings from a settingsfile and adds it to the browser
 		*/
 		void openProject(ProjectSettings* settings);
+
+		/*
+			Function: getPathname
+
+			returns the pathname of the given item
+		*/
+		FXString getPathname(FXTreeItem* item);
 };
 
 

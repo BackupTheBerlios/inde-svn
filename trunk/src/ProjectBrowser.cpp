@@ -20,27 +20,30 @@
 
 #include "ProjectBrowser.h"
 #include "StringTokenizer.h"
+#include "FileSystem.h"
 
 //////////////////////////////////////////////////
 // Message map
 
 FXDEFMAP(ProjectBrowser) ProjectBrowserMap[] = {
-//	FXMAPFUNC(SEL_COMMAND, ProjectBrowser::ID_SELECTLICENSEFILE, ProjectBrowser::onCmdSelectLicenseHeader),
+	FXMAPFUNC(SEL_DOUBLECLICKED,	ProjectBrowser::ID_BROWSER,	ProjectBrowser::onDoubleClick),
 };
 
 
 //////////////////////////////////////////////////
 // Object implementation
-FXIMPLEMENT(ProjectBrowser, FXComposite, ProjectBrowserMap, ARRAYNUMBER(ProjectBrowserMap))
+FXIMPLEMENT(ProjectBrowser, FXVerticalFrame, ProjectBrowserMap, ARRAYNUMBER(ProjectBrowserMap))
 
 
 
 //////////////////////////////////////////////////
 // Constructor
-ProjectBrowser::ProjectBrowser(FXComposite *p, FXObject *tgt, FXSelector sel, FXuint opts, FXint x, FXint y, FXint w, FXint h)
-	: FXComposite(p)
+ProjectBrowser::ProjectBrowser(FXComposite* p, MainWindow* win, FXObject* tgt, FXSelector sel, FXuint opts)
+	: FXVerticalFrame(p, opts, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 {
-	projectTree = new FXTreeList(p, tgt, sel, opts, x, y, w, h);
+	mainWin = win;
+
+	projectTree = new FXTreeList(this, this, ID_BROWSER, TREELIST_BROWSESELECT|TREELIST_SHOWS_LINES|TREELIST_SHOWS_BOXES|LAYOUT_FILL_X|LAYOUT_FILL_Y);
 }
 
 
@@ -56,57 +59,7 @@ ProjectBrowser::~ProjectBrowser()
 // Fox interface
 void ProjectBrowser::create()
 {
-	projectTree->create();
-}
-
-void ProjectBrowser::detach()
-{
-	projectTree->detach();
-}
-
-void ProjectBrowser::layout()
-{
-	projectTree->layout();
-}
-
-FXint ProjectBrowser::getDefaultWidth()
-{
-	return projectTree->getDefaultWidth();
-}
-
-FXint ProjectBrowser::getDefaultHeight()
-{
-	return projectTree->getDefaultHeight();
-}
-
-FXint ProjectBrowser::getContentWidth()
-{
-	return projectTree->getContentWidth();
-}
-
-FXint ProjectBrowser::getContentHeight()
-{
-	return projectTree->getContentHeight();
-}
-
-void ProjectBrowser::recalc()
-{
-	projectTree->recalc();
-}
-
-FXbool ProjectBrowser::canFocus() const
-{
-	return projectTree->canFocus();
-}
-
-void ProjectBrowser::setFocus()
-{
-	projectTree->setFocus();
-}
-
-void ProjectBrowser::killFocus()
-{
-	projectTree->killFocus();
+	FXVerticalFrame::create();
 }
 
 
@@ -228,6 +181,7 @@ FXString ProjectBrowser::getActiveProject()
 		FXTreeItem* parent = current->getParent();
 		if (parent == NULL)
 			break;
+		current = parent;
 	}
 	return current->getText();
 }
@@ -313,3 +267,50 @@ void ProjectBrowser::openProject(ProjectSettings* settings)
 	delete strtok;
 }
 
+
+//////////////////////////////////////////////////
+FXString ProjectBrowser::getPathname(FXTreeItem* item) 
+{
+	FXString path;
+
+	FXTreeItem* current = item;
+	while (true)
+	{
+		path.prepend(current->getText());
+		path.prepend(FS::dirSeparator());
+		FXTreeItem* parent = current->getParent();
+		if (parent == NULL)
+			break;
+		current = parent;
+	}
+
+	path.prepend(mainWin->settings->getStringValue("baseDir"));
+	return path;
+}
+
+
+//////////////////////////////////////////////////
+long ProjectBrowser::onDoubleClick(FXObject* sender, FXSelector sel, void* ptr)
+{
+	FXTRACE((1, "FileBrowser::onDoubleClick()\n"));
+	if (ptr)
+	{
+		FXTreeItem* item = (FXTreeItem*)ptr;
+		if (!projectTree->isItemLeaf(item))
+		{
+	    	if(projectTree->isItemExpanded(item))
+	    	{
+				projectTree->collapseTree(item, TRUE);
+			}
+			else
+			{
+				projectTree->expandTree(item, TRUE);
+			}
+		}
+		else// if (projectTree->isItemLeaf(item))
+		{
+			mainWin->getEditor()->openFile(getPathname(item));
+		}
+	}
+	return 1;
+}

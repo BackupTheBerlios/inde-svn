@@ -176,7 +176,7 @@ void MainWindow::buildContent()
 	new FXTabItem(browserFrame, "Project");
 	FXVerticalFrame* frm5 	= new FXVerticalFrame(browserFrame, LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_RAISED, 0, 0, 0, 0, 5, 5, 5, 5, 0, 0);
 	FXVerticalFrame* frm6 	= new FXVerticalFrame(frm5, LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_LINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	projectBrowser 			= new ProjectBrowser(frm6, NULL, 0, TREELIST_BROWSESELECT|TREELIST_SHOWS_LINES|TREELIST_SHOWS_BOXES|LAYOUT_FILL_X|LAYOUT_FILL_Y);
+	projectBrowser 			= new ProjectBrowser(frm6, this);
 	FXHorizontalFrame* frm7 = new FXHorizontalFrame(frm5, LAYOUT_FILL_X, 0, 0, 0, 0, 0, 0, 4, 0, 0, 4);
 	new FXLabel(frm7, "Filter:", NULL, LAYOUT_CENTER_Y);
 	projectFilter 			= new FXComboBox(frm7, 25, NULL, 0, COMBOBOX_STATIC|LAYOUT_FILL_X|FRAME_SUNKEN|FRAME_THICK);
@@ -440,7 +440,7 @@ FXbool MainWindow::openProject(const FXString& location)
 
 void MainWindow::editProjectSettings(ProjectSettings* settings)
 {
-	ProjectSettingsDialog dialog(this, "InDE settings");
+	ProjectSettingsDialog dialog(this, "InDE project settings");
 	dialog.run(settings);
 }
 

@@ -111,6 +111,10 @@ ProjectSettingsDialog::ProjectSettingsDialog(MainWindow* owner, const FXString& 
 	new FXTextField(frm, 60, &tgtIncludeDir, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
 	new FXLabel(frm, "Build directory:");
 	new FXTextField(frm, 60, &tgtBuildDir, FXDataTarget::ID_VALUE);
+	new FXLabel(frm, "Documentation directory:");
+	new FXTextField(frm, 60, &tgtDocDir, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
+	new FXLabel(frm, "Ressource directory:");
+	new FXTextField(frm, 60, &tgtRessourceDir, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
 
 	// Libraries and path settings
 	frm = new FXVerticalFrame(switcher, LAYOUT_FILL_X|LAYOUT_FILL_Y);
@@ -121,10 +125,6 @@ ProjectSettingsDialog::ProjectSettingsDialog(MainWindow* owner, const FXString& 
 	new FXTextField(frm, 60, &tgtLibraryPaths, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
 	new FXLabel(frm, "Libraries to link with (comma separated list, without suffix and prefix):");
 	new FXTextField(frm, 60, &tgtLibraries, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
-	new FXLabel(frm, "Documentation directory:");
-	new FXTextField(frm, 60, &tgtDocDir, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
-	new FXLabel(frm, "Ressource directory:");
-	new FXTextField(frm, 60, &tgtRessourceDir, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
 
 	// Compiler and linker options
 	frm = new FXVerticalFrame(switcher, LAYOUT_FILL_X|LAYOUT_FILL_Y);
