@@ -1,105 +1,54 @@
 #include "SyntaxParser.h"
 
-FXIMPLEMENT(SyntaxParser,FXObject,NULL,0)
-
-
-// Constructor
-SyntaxParser::SyntaxParser()
-{
-	line = new FXchar;
-	tok = new FXchar;
-	fp = NULL;
-	number = 0;
-}
-
-
-// Destructor
-SyntaxParser::~SyntaxParser()
-{
-	if (fp) fclose(fp);
-	delete line;
-	delete tok;
-}
-
-
-// Set file
-void SyntaxParser::setFile(const FXString& filename)
-{
-	FXTRACE((1, "%s::%s(\"%s\")\n", getClassName(), "setFile", filename.text()));
-	if (fp) fclose(fp);
-	file = filename;
-}
-
-
-// Get file
-const FXString& SyntaxParser::getFile()
-{
-	return file;
-}
-
-
 // Get next non-empty line
-FXchar* SyntaxParser::getline()
-{
-	register FXchar *ptr;
-	while ((ptr = fgets(buffer, sizeof(buffer), fp)) != NULL)
-	{
-		number++;
-	    while(*ptr && isspace((FXuchar) *ptr)) 
-	    {	
-	    	ptr++;
-		    if(*ptr != '\0' && *ptr != '\n' && *ptr != '\r' && *ptr != '#') 
-		    {
-		    	break;
-		    }
-	    }
-	}
-	return ptr;
-}
+FXchar* SyntaxParser::getline(){
+  register FXchar *ptr;
+  while((ptr=fgets(buffer,sizeof(buffer),fp))!=NULL){
+    number++;
+    while(*ptr && isspace((FXuchar)*ptr)) ptr++;
+    if(*ptr!='\0' && *ptr!='\n' && *ptr!='\r' && *ptr!='#') break;
+    }
+  return ptr;
+  }
 
 
 // Get next token from file
-const FXchar* SyntaxParser::token()
-{
-	line = tok = getline();
-	if(!line) return NULL;
-	while(*line && isalpha((FXuchar) *line)) line++;
-	*line++ = '\0';
-	return tok;
-}
+const FXchar* SyntaxParser::token(){
+  line=tok=getline();
+  if(!line) return NULL;
+  while(*line && isalpha((FXuchar)*line)) line++;
+  *line++='\0';
+  return tok;
+  }
 
 
 // Parse word from line
-const FXchar* SyntaxParser::word()
-{
-	register FXchar *value;
-	while(*line && isspace((FXuchar) *line)) line++;
-	value = line;
-	while(*line && !isspace((FXuchar) *line)) line++;
-	*line++ = '\0';
-	return value;
-}
+const FXchar* SyntaxParser::word(){
+  register FXchar *value;
+  while(*line && isspace((FXuchar)*line)) line++;
+  value=line;
+  while(*line && !isspace((FXuchar)*line)) line++;
+  *line++='\0';
+  return value;
+  }
 
 
 // Parse escaped string from line
-const FXchar* SyntaxParser::string()
-{
-	register FXchar *value, *ptr;
-	while(*line && *line != '"') line++;
-	if(*line == '"')
-	{
-		line++;
-		value = ptr=line;
-		while(*line && *line != '\n' && *line != '\r' && *line != '"')
-		{
-			if(*line == '\\' && *(line+1) == '"') line++;
-			*ptr++ = *line++;
-		}
-		*ptr='\0';
-		return value;
-	}
-  	return "";
-}
+const FXchar* SyntaxParser::string(){
+  register FXchar *value,*ptr;
+  while(*line && *line!='"') line++;
+  if(*line=='"'){
+    line++;
+    value=ptr=line;
+    while(*line && *line!='\n' && *line!='\r' && *line!='"'){
+      if(*line=='\\' && *(line+1)=='"') line++;
+      *ptr++=*line++;
+      }
+    *ptr='\0';
+    return value;
+    }
+  return "";
+  }
 
 
 // Parse rules and sub rules
@@ -109,7 +58,7 @@ FXbool SyntaxParser::parserules(FXSyntax *syntax,FXint parent){
   FXRexError error;
   FXint      index;
 
-  FXTRACE((1,"parserules begin parent = %d\n",parent));
+  FXTRACE((2,"parserules begin parent = %d\n",parent));
 
   // Parse the rules
   while(strcmp(tok,"rule")==0){
@@ -165,9 +114,9 @@ FXbool SyntaxParser::parserules(FXSyntax *syntax,FXint parent){
       return FALSE;
       }
 
-    FXTRACE((1,"brex = %s\n",brex.text()));
-    FXTRACE((1,"erex = %s\n",erex.text()));
-    FXTRACE((1,"srex = %s\n",srex.text()));
+    FXTRACE((2,"brex = %s\n",brex.text()));
+    FXTRACE((2,"erex = %s\n",erex.text()));
+    FXTRACE((2,"srex = %s\n",srex.text()));
 
     // Validation
     if(brex.empty()) return FALSE;
@@ -196,7 +145,7 @@ FXbool SyntaxParser::parserules(FXSyntax *syntax,FXint parent){
     token();
     if(!tok) return FALSE;
     }
-  FXTRACE((1,"parserules end parent = %d\n",parent));
+  FXTRACE((2,"parserules end parent = %d\n",parent));
   return TRUE;
   }
 
@@ -206,7 +155,7 @@ FXbool SyntaxParser::parse(FXSyntaxList& syntaxes){
   FXSyntax *syntax;
   FXString  name;
 
-  FXTRACE((1,"SyntaxParser::parse: file = %s\n",file.text()));
+  FXTRACE((2,"SyntaxParser::parse: file = %s\n",file.text()));
 
   // Open file
   fp=fopen(file.text(),"r");
@@ -273,6 +222,6 @@ FXbool SyntaxParser::parse(FXSyntaxList& syntaxes){
       return FALSE;
       }
     }
-  FXTRACE((1,"SyntaxParser::parse: OK\n"));
+  FXTRACE((2,"SyntaxParser::parse: OK\n"));
   return TRUE;
   }

@@ -40,6 +40,8 @@ typedef FXObjectListOf<FXRule> FXRuleList;
 // List of syntaxes
 typedef FXObjectListOf<FXSyntax> FXSyntaxList;
 
+typedef FXArray<FXHiliteStyle> FXHiliteArray;
+
 
 // Highlight node
 class FXRule : public FXObject {

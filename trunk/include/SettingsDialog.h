@@ -6,35 +6,71 @@
 
 class MainWindow;
 
+/*
+	Class: SettingsDialog
+*/
 class SettingsDialog : public FXDialogBox
 {
 	FXDECLARE(SettingsDialog)
-	
+
 	protected:
 		SettingsDialog() {};
 		SettingsDialog(const SettingsDialog&);
 		SettingsDialog& operator=(const SettingsDialog&);
-		
+
+	public:
+		FXString		baseDir;
+		FXbool			loadProject;
+
+		FXbool			saveOnTabSwitch;
+		FXbool			autosave;
+		FXuint			autosaveInterval;
+		FXbool			backupOnSave;
+		FXString		backupSuffix;
+
+		FXString		font;
+		FXString		syntaxFile;
+
 	private:
-		
+		FXDataTarget	tgtBaseDir;
+		FXDataTarget	tgtLoadProject;
+
+		FXDataTarget	tgtFont;
+		FXDataTarget	tgtSyntaxFile;
+
+	private:
+		FXSwitcher*		switcher;
+
 	public:
 		enum {
-			ID_SELECTBASEDIR = FXDialogBox::ID_LAST,
+			ID_SELECT_BASEDIR = FXDialogBox::ID_LAST,
+			ID_SELECT_FONT,
+			ID_SELECT_SYNTAXFILE,
 			ID_LAST,
 		};
-		
+
 	public:
-		long onCmdSelectBaseDir(FXObject*, FXSelector, void*);
-		
+		long onSelectBaseDir(FXObject*, FXSelector, void*);
+		long onSelectFont(FXObject*, FXSelector, void*);
+		long onSelectSyntaxFile(FXObject*, FXSelector, void*);
+
 	public:
-	
-		SettingsDialog(MainWindow* owner, const FXString& title);
-		
+
+		SettingsDialog(MainWindow*, const FXString&);
+
 		virtual void create();
-		
-		~SettingsDialog();
-		
-		FXbool check();
+
+		virtual ~SettingsDialog();
+
+		virtual FXbool check();
+
+		MainWindow* getOwner() { return (MainWindow*)FXDialogBox::getOwner(); }
+
+		void loadValues();
+
+		void storeValues();
+
+		void run();
 };
 
 #endif // SETTINGSDIALOG_H

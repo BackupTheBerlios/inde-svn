@@ -1,12 +1,29 @@
 #include "InDE.h"
-#include "App.h"
-#include "MainWindow.h"
 
-int main(int argc, char** argv)
+FXDEFMAP(InDE) InDEMap[] = {
+	0,
+};
+
+FXIMPLEMENT(InDE, FXApp, InDEMap, ARRAYNUMBER(InDEMap))
+
+InDE::InDE(const FXString& appKey, const FXString& vendorKey)
+:	FXApp(appKey, vendorKey)
 {
-	App app("InDE");
-	app.init(argc, argv);
-	MainWindow win(&app, "InDE");
-	app.create();
-	return app.run();
+#ifndef DEBUG
+/*
+	addSignal(SIGINT,	this,	ID_CLOSEALL);
+	addSignal(SIGQUIT,	this,	ID_CLOSEALL);
+	addSignal(SIGHUP,	this,	ID_CLOSEALL);
+	addSignal(SIGPIPE,	this,	ID_CLOSEALL);
+*/
+#endif
+}
+
+void InDE::create()
+{
+	FXApp::create();
+}
+
+InDE::~InDE()
+{
 }
