@@ -1,6 +1,7 @@
 #include "TabEditor.h"
 #include "TabItem.h"
 #include <fstream>
+#include <fxkeys.h>
 
 FXDEFMAP(TabEditor) TabEditorMap[] = {
 	FXMAPFUNC(SEL_RIGHTBUTTONRELEASE,	TabEditor::ID_TAB_MENU,		TabEditor::onTabMenu),

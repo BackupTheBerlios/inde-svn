@@ -1,6 +1,9 @@
 #include "Edit.h"
+#include <fxkeys.h>
 
-FXDEFMAP(Edit) EditMap[] = {0,};
+FXDEFMAP(Edit) EditMap[] = {
+	0,
+};
 
 FXIMPLEMENT(Edit, FXText, EditMap, ARRAYNUMBER(EditMap))
 

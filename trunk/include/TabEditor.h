@@ -247,7 +247,7 @@ class TabEditor : public FXTabBook
 			Function: showNextTab
 		*/
 		void showNextTab();
-		
+
 		/*
 			Function: showPreviousTab()
 		*/

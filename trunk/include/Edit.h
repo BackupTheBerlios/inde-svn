@@ -75,7 +75,7 @@ class Edit : public FXText
 			Function: setModified
 		*/
 		void setModified(FXbool flag=true);
-		
+
 		/*
 			Function: isModified
 		*/
