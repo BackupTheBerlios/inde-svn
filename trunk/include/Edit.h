@@ -65,7 +65,7 @@ class Edit : public FXText
 
 		/*
 			Function: setTitleTab
-			
+
 			Passes pointer to the TabItem displaying the filename
 		*/
 		void setTitleTab(FXTabItem* tab);
@@ -94,6 +94,21 @@ class Edit : public FXText
 				Syntax currently used for highlighting the document content
 		*/
 		FXSyntax* getSyntax() { return syntax; }
+
+		/*
+			Function: findRestylePoint
+		*/
+		FXint findRestylePoint(FXint pos, FXint& style) const;
+		
+		/*
+			Function: backwardByContext
+		*/
+		FXint backwardByContext(FXint pos) const;
+		
+		/*
+			Function: forwardByContext
+		*/
+		FXint forwardByContext(FXint pos) const;
 
 };
 

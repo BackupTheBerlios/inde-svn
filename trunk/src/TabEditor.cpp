@@ -3,6 +3,8 @@
 #include <fstream>
 #include <fxkeys.h>
 
+#define RESTYLEJUMP     80
+
 FXDEFMAP(TabEditor) TabEditorMap[] = {
 	FXMAPFUNC(SEL_RIGHTBUTTONRELEASE,	TabEditor::ID_TAB_MENU,		TabEditor::onTabMenu),
 	FXMAPFUNCS(SEL_COMMAND,				TabEditor::ID_NEW,
@@ -385,6 +387,75 @@ FXHiliteStyle TabEditor::readStyleForRule(const FXString& name)
 	return style;
 }
 
+FXint TabEditor::restyleRange(FXuint index, FXint beg, FXint end, FXint& head, FXint& tail, FXint rule)
+{
+	FXTRACE((1, "TabEditor::restyleRange(%i, %i, %i, %i, %i, %i)\n", index, beg, end, head, tail, rule));
+	Edit* edit = documentAt(index);
+	FXchar* text;
+	FXchar* newstyle;
+	FXchar* oldstyle;
+	register FXint len = end - beg;
+	register FXint delta = len;
+	FXASSERT(0 <= rule);
+	FXASSERT(0 <= beg && beg <= end && end <= edit->getLength());
+	FXMALLOC(&text, FXchar, len + len + len);
+	newstyle = text + len;
+	oldstyle = text + len + len;
+	edit->extractText(text, beg, len);
+	edit->extractStyle(oldstyle, beg, len);
+	edit->getSyntax()->getRule(rule)->stylizeBody(text, newstyle, 0, len, head, tail);
+	edit->changeStyle(beg, len, newstyle);
+	while(0 < delta && oldstyle[delta-1] == newstyle[delta-1])
+		--delta;
+	FXFREE(&text);
+	head += beg;
+	tail += beg;
+	delta += beg;
+	FXTRACE((1,"changed head=%d tail=%d same till delta=%d\n",head,tail,delta));
+	return delta;
+}
+
+void TabEditor::restyleDocument(FXuint index, FXint pos, FXint del, FXint ins)
+{
+	FXTRACE((1, "TabEditor::restyleDocument(%i, %i, %i, %i)\n", index, pos, del, ins));
+	Edit* edit = documentAt(index);
+	FXint head, tail, changed, affected, beg, end, len, rule, restylejump;
+	if(edit->getSyntax())
+	{
+		len = edit->getLength();
+		changed = pos + ins;
+		beg = edit->findRestylePoint(pos,rule);
+		end = edit->forwardByContext(changed);
+		FXASSERT(0 <= rule);
+		restylejump = RESTYLEJUMP;
+		while (1)
+		{
+			affected = restyleRange(index, beg, end, head, tail, rule);
+			if (tail < end)
+			{
+				beg = tail;
+				if (rule == 0)
+				{
+					fxwarning("Top level patterns did not color everything.\n");
+					return;
+				}
+				rule = edit->getSyntax()->getRule(rule)->getParent();
+				continue;
+			}
+			if (affected > changed)
+			{
+				restylejump <<= 1;
+				changed = affected;
+				end = changed + restylejump;
+				if (end > len)
+					end = len;
+				continue;
+			}
+			return;
+		}
+	}
+}
+
 void TabEditor::restyleDocument(FXuint index)
 {
 	FXTRACE((1, "TabEditor::restyleDocument(%i)\n", index));
@@ -406,30 +477,24 @@ void TabEditor::restyleDocument(FXuint index)
 	}
 }
 
-long TabEditor::onTextInserted(FXObject* sender, FXSelector, void*)
+long TabEditor::onTextInserted(FXObject* sender, FXSelector, void* ptr)
 {
 	FXTRACE((1, "TabEditor::onTextInserted()\n"));
 	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent());
-	Edit* edit = (Edit*)sender;
-	edit->setModified();
-	if (edit->getSyntax())
-	{
-		restyleDocument(index);
-	}
+	((Edit*)sender)->setModified();
+	const FXTextChange* change = (const FXTextChange*)ptr;
+	restyleDocument(index, change->pos,change->ndel,change->nins);
 	return 1;
 }
 
 
-long TabEditor::onTextReplaced(FXObject* sender, FXSelector, void*)
+long TabEditor::onTextReplaced(FXObject* sender, FXSelector, void* ptr)
 {
 	FXTRACE((1, "TabEditor::onTextReplaced()\n"));
 	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent())-1;
-	Edit* edit = (Edit*)sender;
-	edit->setModified();
-	if (edit->getSyntax())
-	{
-		restyleDocument(index);
-	}
+	((Edit*)sender)->setModified();
+	const FXTextChange* change = (const FXTextChange*)ptr;
+	restyleDocument(index, change->pos,change->ndel,change->nins);
 	return 1;
 }
 
@@ -442,16 +507,13 @@ long TabEditor::onTextChanged(FXObject* sender, FXSelector, void*)
 }
 
 
-long TabEditor::onTextDeleted(FXObject* sender, FXSelector, void*)
+long TabEditor::onTextDeleted(FXObject* sender, FXSelector, void* ptr)
 {
 	FXTRACE((1, "TabEditor::onTextDeleted()\n"));
 	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent())-1;
-	Edit* edit = (Edit*)sender;
-	edit->setModified();
-	if (edit->getSyntax())
-	{
-		restyleDocument(index);
-	}
+	((Edit*)sender)->setModified();
+	const FXTextChange* change = (const FXTextChange*)ptr;
+	restyleDocument(index, change->pos,change->ndel,change->nins);
 	return 1;
 }
 

@@ -230,6 +230,20 @@ class TabEditor : public FXTabBook
 		FXHiliteStyle readStyleForRule(const FXString& name);
 
 		/*
+			Function: restyleRange
+
+			Restyles a certain range in the document at index
+		*/
+		FXint restyleRange(FXuint index, FXint beg, FXint end, FXint& head, FXint& tail, FXint rule);
+
+		/*
+			Function: restyleDocument
+			
+			Restyles part of the document at index
+		*/
+		void restyleDocument(FXuint index, FXint pos, FXint del, FXint ins);
+		
+		/*
 			Function: restyleDocument
 
 			Restyle document at given index
@@ -245,7 +259,7 @@ class TabEditor : public FXTabBook
 
 		/*
 			Function: showNextTab
-			
+
 			Switches to the next tab. Displays first tab if current
 			tab is the last one.
 		*/
@@ -266,7 +280,7 @@ class TabEditor : public FXTabBook
 
 		/*
 			Function: applySettingsTo
-			
+
 			Reads settings from MainWindow object and applies
 			them to document at given index
 		*/

@@ -77,3 +77,86 @@ void Edit::setSyntax(FXSyntax* syn)
 {
 	syntax = syn;
 }
+
+FXint Edit::findRestylePoint(FXint pos, FXint& style) const
+{
+	register FXint probepos, safepos, beforesafepos, runstyle, s;
+	style = 0;
+	probepos = backwardByContext(pos);
+	if (probepos == 0)
+		return 0;
+	runstyle = getStyle(probepos);
+	if (runstyle == 0)
+		return probepos;
+
+	safepos = backwardByContext(probepos);
+	beforesafepos = backwardByContext(safepos);
+
+	for (--probepos; 0 < probepos; --probepos)
+	{
+		s = getStyle(probepos);
+		if (s == runstyle)
+		{
+			if (probepos <= beforesafepos)
+			{
+				style = runstyle;
+				return safepos;
+			}
+			continue;
+		}
+
+		if (syntax->isAncestor(s, runstyle))
+		{
+			style = s;
+			return probepos + 1;
+		}
+
+		if (syntax->isAncestor(runstyle, s))
+		{
+			style = runstyle;
+			return probepos + 1;
+		}
+
+	    if (syntax->getRule(s)->getParent() == syntax->getRule(runstyle)->getParent())
+	    {
+			style = syntax->getRule(s)->getParent();
+			return probepos + 1;
+		}
+
+		return probepos+1;
+	}
+	return 0;
+}
+
+FXint Edit::backwardByContext(FXint pos) const
+{
+	register FXint nlines = syntax->getContextLines();
+	register FXint nchars = syntax->getContextChars();
+	register FXint result = pos;
+	if (1 < nlines)
+	{
+		result = prevLine(pos,nlines-1);
+	}
+	else if (nlines == 1)
+	{
+		result = lineStart(pos);
+	}
+	if (pos - nchars < result)
+		result = pos - nchars;
+	if (result < 0)
+		result = 0;
+	return result;
+}
+
+FXint Edit::forwardByContext(FXint pos) const
+{
+	register FXint nlines = syntax->getContextLines();
+	register FXint nchars = syntax->getContextChars();
+	register FXint result = pos;
+	result = nextLine(pos, nlines);
+	if (pos + nchars > result)
+		result = pos + nchars;
+	if (result > getLength())
+		result = getLength();
+	return result;
+}
