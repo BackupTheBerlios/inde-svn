@@ -245,6 +245,9 @@ class TabEditor : public FXTabBook
 
 		/*
 			Function: showNextTab
+			
+			Switches to the next tab. Displays first tab if current
+			tab is the last one.
 		*/
 		void showNextTab();
 
@@ -252,6 +255,22 @@ class TabEditor : public FXTabBook
 			Function: showPreviousTab()
 		*/
 		void showPreviousTab();
+
+		/*
+			Function: applySettings
+
+			Reads settings from MainWindow object and applies
+			them to all opened documents
+		*/
+		void applySettings();
+
+		/*
+			Function: applySettingsTo
+			
+			Reads settings from MainWindow object and applies
+			them to document at given index
+		*/
+		void applySettingsTo(FXuint index);
 };
 
 #endif

@@ -65,9 +65,8 @@ class Edit : public FXText
 
 		/*
 			Function: setTitleTab
-
-			Parameters:
-				tab - a pointer to the <TabItem> displaying the filename
+			
+			Passes pointer to the TabItem displaying the filename
 		*/
 		void setTitleTab(FXTabItem* tab);
 

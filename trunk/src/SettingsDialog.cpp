@@ -14,7 +14,11 @@ SettingsDialog::SettingsDialog(MainWindow* owner, const FXString& title)
 	tgtLoadProject(loadProject),
 	tgtFont(font),
 	tgtSyntaxFile(syntaxFile),
-	tgtLineNumbers(lineNumbers)
+	tgtLineNumbers(lineNumbers),
+	tgtBarColor(barColor),
+	tgtBackColor(backColor),
+	tgtForeColor(foreColor),
+	tgtNumberColor(numberColor)
 {
 	FXVerticalFrame* 	vertical 	= new FXVerticalFrame(this, LAYOUT_SIDE_TOP|LAYOUT_FILL_X|LAYOUT_FILL_Y);
 	FXHorizontalFrame*	horizontal	= new FXHorizontalFrame(vertical, LAYOUT_FILL_X|LAYOUT_FILL_Y);
@@ -24,6 +28,7 @@ SettingsDialog::SettingsDialog(MainWindow* owner, const FXString& title)
 	// Buttons
 	new FXButton(buttons, "General", NULL, switcher, FXSwitcher::ID_OPEN_FIRST, FRAME_RAISED|ICON_ABOVE_TEXT|LAYOUT_FILL_Y);
 	new FXButton(buttons, "Editor", NULL, switcher, FXSwitcher::ID_OPEN_SECOND, FRAME_RAISED|ICON_ABOVE_TEXT|LAYOUT_FILL_Y);
+	new FXButton(buttons, "Colors", NULL, switcher, FXSwitcher::ID_OPEN_THIRD, FRAME_RAISED|ICON_ABOVE_TEXT|LAYOUT_FILL_Y);
 
 	FXVerticalFrame*	general		= new FXVerticalFrame(switcher, LAYOUT_FILL_X|LAYOUT_FILL_Y);
 	new FXLabel(general, "General settings", NULL, LAYOUT_LEFT);
@@ -48,6 +53,15 @@ SettingsDialog::SettingsDialog(MainWindow* owner, const FXString& title)
 	new FXButton(matrix2, "Select ...", NULL, this, ID_SELECT_SYNTAXFILE, FRAME_RAISED|FRAME_THICK, 0, 0, 0, 0, 12, 12, 4, 4);
 	new FXLabel(matrix2, "Display line numbers:", NULL, JUSTIFY_LEFT|LAYOUT_CENTER_Y|LAYOUT_FILL_X|LAYOUT_FILL_ROW);
 	new FXCheckButton(matrix2, "Yes", &tgtLineNumbers, FXDataTarget::ID_VALUE);
+
+	FXVerticalFrame*	colors		= new FXVerticalFrame(switcher, LAYOUT_FILL_X|LAYOUT_FILL_Y);
+	FXMatrix*			matrix3		= new FXMatrix(colors, 3, MATRIX_BY_COLUMNS|PACK_UNIFORM_HEIGHT|LAYOUT_FILL_X|LAYOUT_FILL_X);
+	new FXLabel(matrix3, "Line numbers:");
+	new FXColorWell(matrix3, FXRGB(0, 0, 0), &tgtNumberColor, FXDataTarget::ID_VALUE, FRAME_SUNKEN|FRAME_THICK|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FILL_ROW,0,0,40,24);
+	new FXColorWell(matrix3, FXRGB(0, 0, 0), &tgtBarColor, FXDataTarget::ID_VALUE, FRAME_SUNKEN|FRAME_THICK|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FILL_ROW,0,0,40,24);
+	new FXLabel(matrix3, "Text:");
+	new FXColorWell(matrix3, FXRGB(0, 0, 0), &tgtForeColor, FXDataTarget::ID_VALUE, FRAME_SUNKEN|FRAME_THICK|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FILL_ROW,0,0,40,24);
+	new FXColorWell(matrix3, FXRGB(0, 0, 0), &tgtBackColor, FXDataTarget::ID_VALUE, FRAME_SUNKEN|FRAME_THICK|LAYOUT_LEFT|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT|LAYOUT_FILL_ROW,0,0,40,24);
 
 	new FXHorizontalSeparator(vertical, SEPARATOR_RIDGE|LAYOUT_FILL_X);
   	FXHorizontalFrame* box 			= new FXHorizontalFrame(vertical, LAYOUT_BOTTOM|LAYOUT_FILL_X|PACK_UNIFORM_WIDTH);
@@ -82,7 +96,7 @@ FXbool SettingsDialog::check()
 				break;
 		}
 	}
-	
+
 	if (!errors && !FXFile::exists(syntaxFile))
 	{
 		FXMessageBox::error(this, MBOX_OK, "Syntax file not found", "The syntax file you selected could not be found. Please select a different file.");
@@ -106,6 +120,10 @@ void SettingsDialog::loadValues()
 	font 		= settings->getStringValue("EDITOR", "font");
 	syntaxFile	= settings->getStringValue("EDITOR", "syntaxFile");
 	lineNumbers = settings->getIntValue("EDITOR", "lineNumbers");
+	numberColor	= settings->getColorValue("COLORS", "numberColor");
+	barColor	= settings->getColorValue("COLORS", "barColor");
+	backColor	= settings->getColorValue("COLORS", "backColor");
+	foreColor	= settings->getColorValue("COLORS", "foreColor");
 }
 
 void SettingsDialog::storeValues()
@@ -116,6 +134,10 @@ void SettingsDialog::storeValues()
 	settings->setStringValue("EDITOR", "font", font);
 	settings->setStringValue("EDITOR", "syntaxFile", syntaxFile);
 	settings->setIntValue("EDITOR", "lineNumbers", lineNumbers);
+	settings->setColorValue("COLORS", "numberColor", numberColor);
+	settings->setColorValue("COLORS", "barColor", barColor);
+	settings->setColorValue("COLORS", "foreColor", foreColor);
+	settings->setColorValue("COLORS", "backColor", backColor);
 }
 
 void SettingsDialog::run()

@@ -1,0 +1,154 @@
+===============================================================================
+                                 InDE README
+===============================================================================
+
+                               I. Introduction
+                              II. Requirements
+                             III. Getting InDE
+                              IV. Installation
+                               V. Getting started
+                              VI. Help and Support
+                             VII. Bug reports
+                            VIII. Joining development
+                              IX. License
+
+===============================================================================
+
+
+
+I. Introduction
+-------------------------------------------------------------------------------
+
+You may ask yourself: What is InDE? 
+We often call it "a fast and pragmatic C/C++ IDE". This means InDE is a program
+which you can use to write software. There are tons of useful features which 
+make developing fun:
+
+	<list of features>
+	
+<note on platform independent software development with SCons>
+
+
+
+II. Requirements
+-------------------------------------------------------------------------------
+
+You at least need:
+
+	- Python >= 2.3
+	- SCons >= 0.93
+	- FOX >= 1.5.0
+
+
+
+III. Getting InDE
+-------------------------------------------------------------------------------
+
+There are many ways to get InDE packages for your machine. The most common way
+is to visit our website at http://inde.berlios.de/ and download the latest
+stable (or development) release.
+
+If you use Linux, your distribution might already offer pre-compiled InDE 
+packages.
+
+Another way is to get our daily development snapshot at:
+	
+	http://inde.berlios.de/download/inde-snapshot.tar.bz2
+
+Finally, you can checkout the current Subversion tree by using the SVN command
+line client:
+
+	svn checkout svn://svn.berlios.de/projects/inde/trunk
+
+
+
+IV. Installation
+-------------------------------------------------------------------------------
+
+After downloading the latest release or our daily development snapshot 
+from our website you will have to unpack and change to the directory
+you unpacked the archive at first:
+
+	tar xvjf <archive name>.tar.bz2
+	cd <archive name>/
+
+If you checked out the source from our SVN tree, go to the directory inde/trunk
+if you are not already in it.
+
+After this, every method will build and install using the same instructions, 
+that are:
+	
+	scons				-	Compiling
+	scons -c			-	Cleaning up the build
+	scons install		-	Install InDE
+	scons -c install	-	Uninstall InDE
+	scons docs			-	Make docs (they can be found in doc/)
+	
+You can get more information about available commands and parameters using
+
+	scons --help
+	
+	
+
+V. Getting started
+-------------------------------------------------------------------------------
+
+While you are reading this README we probably might have created some 
+documentation for InDE already. You can read them by opening
+
+	docs/index.html
+	
+with a web browser of your choice. They are mostly validated XHTML documents so
+you can view them even with a text browser like Lynx.
+
+
+
+VI. Help and Support
+-------------------------------------------------------------------------------
+
+If you run into problems or like to see new features getting integrated into
+InDE, feel free to join the InDE-users mailinglist at:
+
+	<mailing-list url>
+
+If you think you have found a bug, see next section for instructions on how to 
+let us now about them.
+
+Please let us know if you are using InDE for developing a certain software. 
+This way we can support you by an entry in the "Projects" list on our website.
+
+
+VII. Bug reports
+-------------------------------------------------------------------------------
+
+You can report bugs either by posting them at
+
+	<bug-tracker url>
+
+or joining the InDE-devel mailinglist at
+
+	<mailing-list url>
+
+
+
+VIII. Joining development
+-------------------------------------------------------------------------------
+
+There are many ways to contribute to InDE:
+	
+	- Translating InDE into another language
+	- Taking part in discussions on the InDE-devel mailinglist 
+	- Taking over maintenance for InDE packages for your Linux/BSD distribution
+	
+	<list of other possibilities>
+
+
+
+IX. License
+-------------------------------------------------------------------------------
+
+InDE is licensed under GNU GPL. Its complete contents can be found in the
+LICENSE file.
+
+
+Thanks for using InDE!

@@ -343,6 +343,10 @@ void MainWindow::readSettings()
 	settings->setDefault("EDITOR", "font", "courier [adobe],90,medium,regular");
 	settings->setDefault("EDITOR", "syntaxFile", "share/syntax.stx");
 	settings->setDefault("EDITOR", "lineNumbers", true);
+	settings->setDefaultColor("COLORS", "foreColor", FXRGB(0, 0, 0));
+	settings->setDefaultColor("COLORS", "backColor", FXRGB(255, 255, 255));
+	settings->setDefaultColor("COLORS", "numberColor", FXRGB(100, 100, 100));
+	settings->setDefaultColor("COLORS", "barColor", FXRGB(220, 220, 220));
 	settings->parse();
 }
 
@@ -356,9 +360,8 @@ void MainWindow::resetSettings()
 
 void MainWindow::applySettings()
 {
-	editor->setFont(settings->getStringValue("EDITOR", "font"));
-	editor->setSyntaxFile(settings->getStringValue("EDITOR", "syntaxFile"));
-	editor->showLineNumbers(settings->getIntValue("EDITOR", "lineNumbers"));
+	FXTRACE((1, "MainWindow::applySettings()\n"));
+	editor->applySettings();
 }
 
 void MainWindow::aboutDialog()

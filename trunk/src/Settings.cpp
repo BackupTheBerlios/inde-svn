@@ -138,7 +138,7 @@ void Settings::setFormatValue(const FXString& key, const FXchar* format, ...)
 {
 	if (!format)
 	{
-		fxerror("FXSettings::writeFormatEntry: bad fmt argument.\n"); 
+		fxerror("FXSettings::writeFormatEntry: bad fmt argument.\n");
 	}
 	FXStringDict* group = insert("GENERAL");
 	va_list args;
@@ -163,7 +163,7 @@ void Settings::setFormatValue(const FXString& section, const FXString& key, cons
 {
 	if (!format)
 	{
-		fxerror("FXSettings::writeFormatEntry: bad fmt argument.\n"); 
+		fxerror("FXSettings::writeFormatEntry: bad fmt argument.\n");
 	}
 	FXStringDict* group = insert(section.text());
 	va_list args;
@@ -226,4 +226,37 @@ FXint Settings::getFormatValue(const FXString& section, const FXString& key, con
 	}
 	va_end(args);
 	return result;
+}
+
+
+void Settings::setColorValue(const FXString& key, FXColor value)
+{
+	setColorValue("GENERAL", key, value);
+}
+
+void Settings::setColorValue(const FXString& section, const FXString& key, FXColor value)
+{
+	FXTRACE((1, "Settings::setColorValue(%s, %s, %i)\n", section.text(), key.text(), value));
+	writeColorEntry(section.text(), key.text(), value);
+}
+
+void Settings::setDefaultColor(const FXString& key, FXColor value)
+{
+	setDefaultColor("GENERAL", key, value);
+}
+
+void Settings::setDefaultColor(const FXString& section, const FXString& key, FXColor value)
+{
+	FXTRACE((1, "Settings::setDefault(%s, %s, %i)\n", section.text(), key.text(), -value));
+	defaultDict->writeColorEntry(section.text(), key.text(), value);
+}
+
+FXColor Settings::getColorValue(const FXString& key)
+{
+	return getColorValue("GENERAL", key);
+}
+
+FXColor Settings::getColorValue(const FXString& section, const FXString& key)
+{
+	return readColorEntry(section.text(), key.text());
 }

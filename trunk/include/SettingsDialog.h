@@ -32,6 +32,11 @@ class SettingsDialog : public FXDialogBox
 		FXString		syntaxFile;
 		FXbool			lineNumbers;
 
+		FXColor			backColor;
+		FXColor			foreColor;
+		FXColor			numberColor;
+		FXColor			barColor;
+
 	private:
 		FXDataTarget	tgtBaseDir;
 		FXDataTarget	tgtLoadProject;
@@ -39,6 +44,11 @@ class SettingsDialog : public FXDialogBox
 		FXDataTarget	tgtFont;
 		FXDataTarget	tgtSyntaxFile;
 		FXDataTarget	tgtLineNumbers;
+
+		FXDataTarget	tgtBackColor;
+		FXDataTarget	tgtForeColor;
+		FXDataTarget	tgtNumberColor;
+		FXDataTarget	tgtBarColor;
 
 	private:
 		FXSwitcher*		switcher;

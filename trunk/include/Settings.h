@@ -151,26 +151,70 @@ class Settings : public FXSettings
 			Defines an integer value for a key in a section
 		*/
 		void setIntValue(const FXString& section, const FXString& key, FXint value);
-		
+
 		/*
 			Function: setFormatValue
 		*/
 		void setFormatValue(const FXString& key, const FXchar* format, ...);
-		
+
 		/*
 			Function: setFormatValue
 		*/
 		void setFormatValue(const FXString& section, const FXString& key, const FXchar* format, ...);
-		
+
 		/*
 			Function: getFormatValue
 		*/
 		FXint getFormatValue(const FXString& key, const FXchar* format, ...);
-		
+
 		/*
 			Function: getFormatValue
 		*/
 		FXint getFormatValue(const FXString& section, const FXString& key, const FXchar* format, ...);
+
+		/*
+			Function: setColorValue
+
+			Defines color value for a key in section "GENERAL"
+		*/
+		void setColorValue(const FXString& key, FXColor value);
+
+		/*
+			Function: setColorValue
+			
+			Defines color value for a key in a section
+		*/
+		void setColorValue(const FXString& section, const FXString& key, FXColor value);
+
+		/*
+			Function: getColorValue
+			
+			Returns a color of key in section "GENERAL"
+		*/
+		FXColor getColorValue(const FXString& key);
+
+		/*
+			Function: getColorValue
+			
+			Returns a color of key in a section
+		*/
+		FXColor getColorValue(const FXString& section, const FXString& key);
+
+		/*
+			Function: setDefaultColor
+
+			Same as <setDefault> for integers or strings but required a different name
+			due to the difference analogy of FXColor=FXuint to FXint
+		*/
+		void setDefaultColor(const FXString& key, FXColor value);
+
+		/*
+			Function: setDefaultColor
+			
+			Same as <setDefault> for integers or strings but required a different name
+			due to the difference analogy of FXColor=FXuint to FXint
+		*/
+		void setDefaultColor(const FXString& section, const FXString& key, FXColor value);
 
 };
 

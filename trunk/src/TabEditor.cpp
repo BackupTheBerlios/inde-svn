@@ -125,6 +125,7 @@ void TabEditor::appendDocument(const FXString& filename, const FXString& content
 	edit->setFont(newFont);
 	recalc();
 	showLineNumbers(lineNumbersShown);
+	applySettingsTo(numChildren()/2-1);
 }
 
 void TabEditor::appendDocument()
@@ -496,4 +497,32 @@ void TabEditor::showPreviousTab()
 		return;
 	}
 	setCurrent(getCurrent()-1);
+}
+
+void TabEditor::applySettings()
+{
+	FXTRACE((1, "TabEditor::applySettings()\n"));
+	Settings* reg = mainWin->settings;
+	setFont(reg->getStringValue("EDITOR", "font"));
+	setSyntaxFile(reg->getStringValue("EDITOR", "syntaxFile"));
+	showLineNumbers(reg->getIntValue("EDITOR", "lineNumbers"));
+	for (FXuint i = 0; i < numChildren()/2; i++)
+	{
+		applySettingsTo(i);
+	}
+}
+
+void TabEditor::applySettingsTo(FXuint index)
+{
+	FXTRACE((1, "TabEditor::applySettingsTo(%i)\n", index));
+	if (!numChildren() || index >= numChildren()/2)
+	{
+		return;
+	}
+	Settings* reg = mainWin->settings;
+	Edit* doc = documentAt(index);
+	doc->setNumberColor(reg->getColorValue("COLORS", "numberColor"));
+	doc->setBarColor(reg->getColorValue("COLORS", "barColor"));
+	doc->setTextColor(reg->getColorValue("COLORS", "foreColor"));
+	doc->setBackColor(reg->getColorValue("COLORS", "backColor"));
 }
