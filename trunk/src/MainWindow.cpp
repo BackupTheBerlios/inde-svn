@@ -239,6 +239,11 @@ long MainWindow::onCmdNewProject(FXObject*, FXSelector, void*)
 	{
 		if (FXMessageBox::question(this, MBOX_OK, "Warning", FXString("Project directory '"+dirname+"' already exists. Overwrite?").text()) == MBOX_CLICKED_NO)
 			return 1;
+		if (!FXFile::remove(dirname))
+		{
+			FXMessageBox::error(this, MBOX_OK, "Error", "Old directory could not be removed and thus, your project could not be created.");
+			return 1;
+		}
 	}
 	if (!FXFile::createDirectory(dirname, 0777))
 	{
