@@ -50,6 +50,7 @@ class MainWindow : public FXMainWindow
 		
 		// Settings
 		InDESettings			settings;
+		ProjectSettings			projectSettings;
 		
 		// Syntax
 		FXSyntax*				syntax;
@@ -78,6 +79,10 @@ class MainWindow : public FXMainWindow
 			ID_SETTINGS_SAVEONTAB,
 			ID_SETTINGS_AUTOSAVE,
 			ID_SETTINGS_AUTOSAVE_INTERVAL,
+			ID_PROJECT_NAME,
+			ID_PROJECT_DESCRIPTION,
+			ID_PROJECT_TARGET,
+			ID_PROJECT_VERSION,
 			ID_ABOUT,
 			ID_LAST,
 		};
@@ -100,6 +105,15 @@ class MainWindow : public FXMainWindow
 		long onUpdSettingAutosave(FXObject*, FXSelector, void*);
 		long onCmdSettingAutosaveInterval(FXObject*, FXSelector, void*);
 		long onUpdSettingAutosaveInterval(FXObject*, FXSelector, void*);
+
+		long onCmdProjectName(FXObject*, FXSelector, void*);
+		long onUpdProjectName(FXObject*, FXSelector, void*);
+		long onCmdProjectDescription(FXObject*, FXSelector, void*);
+		long onUpdProjectDescription(FXObject*, FXSelector, void*);
+		long onCmdProjectTarget(FXObject*, FXSelector, void*);
+		long onUpdProjectTarget(FXObject*, FXSelector, void*);
+		long onCmdProjectVersion(FXObject*, FXSelector, void*);
+		long onUpdProjectVersion(FXObject*, FXSelector, void*);
 	
 	public:
 	

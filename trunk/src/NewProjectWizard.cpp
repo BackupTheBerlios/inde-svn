@@ -3,7 +3,6 @@
 
 class MainWindow;
 
-
 //////////////////////////////////////////////////
 // Message map
 
@@ -24,10 +23,24 @@ FXIMPLEMENT(NewProjectWizard, FXWizard, NewProjectWizardMap, ARRAYNUMBER(NewProj
 NewProjectWizard::NewProjectWizard(MainWindow* owner, const FXString& name)
 		: FXWizard(owner, name, NULL) 
 {
-	// Step 1:
+	// Step 1: general project information
 	step1 = new FXVerticalFrame(getContainer(), LAYOUT_FILL_X|LAYOUT_FILL_Y);
-	new DialogTitle(step1, _("Step1"));
-	new FXLabel(step1, _("Hier kommen die Menüpunkte...."));
+	new DialogTitle(step1, _("General project settings"));
+	new FXLabel(step1, _("enter project name:"));
+	nameField = new FXTextField(step1, 60, this, MainWindow::ID_PROJECT_NAME);
+	new FXLabel(step1, _("enter project description:"));
+	descriptionField = new FXText(step1, this, MainWindow::ID_PROJECT_DESCRIPTION, FRAME_LINE);
+	descriptionField->setVisibleColumns(60);
+	new FXLabel(step1, _("choose building target:"));
+	targetBox = new FXComboBox(step1, 20, this, MainWindow::ID_PROJECT_TARGET);
+	targetBox->appendItem("executable");
+	targetBox->appendItem("static library");
+	targetBox->appendItem("shared library");
+	targetBox->setNumVisible(3);
+	targetBox->setCurrentItem(0);
+	targetBox->setEditable(FALSE);
+	new FXLabel(step1, _("enter version:"));
+	versionField = new FXTextField(step1, 60, this, MainWindow::ID_PROJECT_VERSION);
 
 	// Step 2:
 	step2 = new FXVerticalFrame(getContainer(), LAYOUT_FILL_X|LAYOUT_FILL_Y);

@@ -29,6 +29,14 @@ FXDEFMAP(MainWindow) MainWindowMap[] = {
 	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_SETTINGS_AUTOSAVE,		MainWindow::onUpdSettingAutosave),
 	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_SETTINGS_AUTOSAVE_INTERVAL, MainWindow::onCmdSettingAutosaveInterval),
 	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_SETTINGS_AUTOSAVE_INTERVAL, MainWindow::onUpdSettingAutosaveInterval),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_NAME, MainWindow::onCmdProjectName),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_NAME, MainWindow::onUpdProjectName),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_DESCRIPTION, MainWindow::onCmdProjectDescription),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_DESCRIPTION, MainWindow::onUpdProjectDescription),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_TARGET, MainWindow::onCmdProjectTarget),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_TARGET, MainWindow::onUpdProjectTarget),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_VERSION, MainWindow::onCmdProjectVersion),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_VERSION, MainWindow::onUpdProjectVersion),
 };
 
 
@@ -281,3 +289,59 @@ long MainWindow::onUpdSettingAutosaveInterval(FXObject* sender, FXSelector, void
 	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETINTVALUE), (void*)(FXival)&settings.saving.autosaveInterval);
 	return 1;
 }
+
+long MainWindow::onCmdProjectName(FXObject*, FXSelector, void* ptr) 
+{
+	projectSettings.general.name = (FXString)(FXchar*)ptr;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectName(FXObject* sender, FXSelector, void* ptr) 
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.general.name);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectDescription(FXObject*, FXSelector, void* ptr) 
+{
+	projectSettings.general.description = (FXString)(FXchar*)ptr;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectDescription(FXObject* sender, FXSelector, void* ptr) 
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.general.description);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectTarget(FXObject*, FXSelector, void* ptr) 
+{
+	projectSettings.general.target = (FXString)(FXchar*)ptr;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectTarget(FXObject* sender, FXSelector, void* ptr) 
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.general.target);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectVersion(FXObject*, FXSelector, void* ptr) 
+{
+	projectSettings.general.version = (FXString)(FXchar*)ptr;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectVersion(FXObject* sender, FXSelector, void* ptr) 
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.general.version);
+	return 1;
+}
+
