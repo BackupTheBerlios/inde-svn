@@ -252,6 +252,10 @@ void AddToProjectDialog::run(const FXString& path)
 				break;
 		}
 	}
+	else	// file is not in InDE workspace
+	{
+		// copy file to InDE project
+	}
 
 	// execute dialog
 	do

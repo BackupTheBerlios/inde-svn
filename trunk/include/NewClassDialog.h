@@ -23,6 +23,7 @@
 
 #include <fx.h>
 #include "MainWindow.h"
+#include "ProjectSettings.h"
 
 class NewClassDialog : public FXDialogBox
 {
@@ -34,7 +35,7 @@ class NewClassDialog : public FXDialogBox
 		FXbool			header;
 		FXint			sourceDir;
 		FXint			includeDir;
-		FXint			classType;
+		FXString		classType;
 
 	private:
 		FXDataTarget	tgtName;
@@ -45,6 +46,7 @@ class NewClassDialog : public FXDialogBox
 		FXDataTarget	tgtClassType;
 
 		MainWindow 		*mw;
+		ProjectSettings	*settings;
 
 	protected:
 		NewClassDialog() {}
@@ -79,7 +81,7 @@ class NewClassDialog : public FXDialogBox
 
 			executes the dialog. 
 		*/
-		void run(const ProjectSettings* path);
+		void run(ProjectSettings* project);
 		
 };
 
