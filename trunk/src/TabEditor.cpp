@@ -115,10 +115,15 @@ void TabEditor::appendDocument(const FXString& filename, const FXString& content
 	edit->setFilename(filename);
 	edit->setText(content);
 	edit->setHiliteMatchTime(2000);
+	edit->setMarginTop(4);
+	edit->setMarginLeft(4);
+	edit->setMarginRight(4);
+	edit->setMarginBottom(4);
 	FXFont* newFont = new FXFont(getApp(), font);
 	newFont->create();
 	edit->setFont(newFont);
 	recalc();
+	showLineNumbers(lineNumbersShown);
 }
 
 void TabEditor::appendDocument()
@@ -446,4 +451,48 @@ long TabEditor::onTextDeleted(FXObject* sender, FXSelector, void*)
 		restyleDocument(index);
 	}
 	return 1;
+}
+
+void TabEditor::showLineNumbers(FXbool flag)
+{
+	FXTRACE((1, "TabEditor::showLineNumbers(%i)\n", flag));
+	for (FXuint i = 0; i < numChildren()/2; i++)
+	{
+		if (flag)
+		{
+			documentAt(i)->setBarColumns(5);
+		}
+		else
+		{
+			documentAt(i)->setBarColumns(0);
+		}
+	}
+	lineNumbersShown = flag;
+}
+
+void TabEditor::showNextTab()
+{
+	FXTRACE((1, "TabEditor::showNextTab()\n"));
+	if (getCurrent() < 0)
+	{
+		return;
+	}
+	if (getCurrent() == (numChildren()/2)-1)
+	{
+		setCurrent(0);
+	}
+	else
+	{
+		setCurrent(getCurrent()+1);
+	}
+}
+
+void TabEditor::showPreviousTab()
+{
+	FXTRACE((1, "TabEditor::showPreviousTab()\n"));
+	if (getCurrent() <= 0)
+	{
+		return;
+	}
+	setCurrent(getCurrent()-1);
 }

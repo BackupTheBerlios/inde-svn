@@ -33,6 +33,8 @@ class TabEditor : public FXTabBook
 		FXSyntaxList		syntaxes;
 		FXHiliteArray		styles;
 
+		FXbool				lineNumbersShown;
+
 	public:
 		enum {
 			ID_TAB_MENU = FXTabBook::ID_LAST,
@@ -233,6 +235,23 @@ class TabEditor : public FXTabBook
 			Restyle document at given index
 		*/
 		void restyleDocument(FXuint index);
+
+		/*
+			Function: showLineNumbers
+
+			Display line numbers or not
+		*/
+		void showLineNumbers(FXbool flag=true);
+
+		/*
+			Function: showNextTab
+		*/
+		void showNextTab();
+		
+		/*
+			Function: showPreviousTab()
+		*/
+		void showPreviousTab();
 };
 
 #endif

@@ -13,7 +13,8 @@ SettingsDialog::SettingsDialog(MainWindow* owner, const FXString& title)
 	tgtBaseDir(baseDir),
 	tgtLoadProject(loadProject),
 	tgtFont(font),
-	tgtSyntaxFile(syntaxFile)
+	tgtSyntaxFile(syntaxFile),
+	tgtLineNumbers(lineNumbers)
 {
 	FXVerticalFrame* 	vertical 	= new FXVerticalFrame(this, LAYOUT_SIDE_TOP|LAYOUT_FILL_X|LAYOUT_FILL_Y);
 	FXHorizontalFrame*	horizontal	= new FXHorizontalFrame(vertical, LAYOUT_FILL_X|LAYOUT_FILL_Y);
@@ -45,6 +46,8 @@ SettingsDialog::SettingsDialog(MainWindow* owner, const FXString& title)
 	new FXLabel(matrix2, "Syntax file:", NULL, JUSTIFY_LEFT|LAYOUT_CENTER_Y|LAYOUT_FILL_X|LAYOUT_FILL_ROW);
 	new FXTextField(matrix2, 50, &tgtSyntaxFile, FXDataTarget::ID_VALUE, FRAME_SUNKEN|FRAME_THICK|LAYOUT_FILL_X|LAYOUT_FILL_ROW);
 	new FXButton(matrix2, "Select ...", NULL, this, ID_SELECT_SYNTAXFILE, FRAME_RAISED|FRAME_THICK, 0, 0, 0, 0, 12, 12, 4, 4);
+	new FXLabel(matrix2, "Display line numbers:", NULL, JUSTIFY_LEFT|LAYOUT_CENTER_Y|LAYOUT_FILL_X|LAYOUT_FILL_ROW);
+	new FXCheckButton(matrix2, "Yes", &tgtLineNumbers, FXDataTarget::ID_VALUE);
 
 	new FXHorizontalSeparator(vertical, SEPARATOR_RIDGE|LAYOUT_FILL_X);
   	FXHorizontalFrame* box 			= new FXHorizontalFrame(vertical, LAYOUT_BOTTOM|LAYOUT_FILL_X|PACK_UNIFORM_WIDTH);
@@ -79,6 +82,13 @@ FXbool SettingsDialog::check()
 				break;
 		}
 	}
+	
+	if (!errors && !FXFile::exists(syntaxFile))
+	{
+		FXMessageBox::error(this, MBOX_OK, "Syntax file not found", "The syntax file you selected could not be found. Please select a different file.");
+		errors++;
+		frame = 1;
+	}
 
 	if (errors > 0)
 	{
@@ -95,6 +105,7 @@ void SettingsDialog::loadValues()
 	loadProject = settings->getIntValue("loadProject");
 	font 		= settings->getStringValue("EDITOR", "font");
 	syntaxFile	= settings->getStringValue("EDITOR", "syntaxFile");
+	lineNumbers = settings->getIntValue("EDITOR", "lineNumbers");
 }
 
 void SettingsDialog::storeValues()
@@ -104,6 +115,7 @@ void SettingsDialog::storeValues()
 	settings->setIntValue("loadProject", loadProject);
 	settings->setStringValue("EDITOR", "font", font);
 	settings->setStringValue("EDITOR", "syntaxFile", syntaxFile);
+	settings->setIntValue("EDITOR", "lineNumbers", lineNumbers);
 }
 
 void SettingsDialog::run()

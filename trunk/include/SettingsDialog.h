@@ -30,6 +30,7 @@ class SettingsDialog : public FXDialogBox
 
 		FXString		font;
 		FXString		syntaxFile;
+		FXbool			lineNumbers;
 
 	private:
 		FXDataTarget	tgtBaseDir;
@@ -37,6 +38,7 @@ class SettingsDialog : public FXDialogBox
 
 		FXDataTarget	tgtFont;
 		FXDataTarget	tgtSyntaxFile;
+		FXDataTarget	tgtLineNumbers;
 
 	private:
 		FXSwitcher*		switcher;

@@ -96,10 +96,14 @@ class MainWindow : public FXMainWindow
 			ID_CLOSE_PROJECTS,
 			ID_PROJECT_SETTINGS,
 
+			// View commands
+			ID_PREV_TAB,
+			ID_NEXT_TAB,
+
 			// Option commands
 			ID_SETTINGS,
 			ID_RESET_SETTINGS,
-			
+
 			// Help commands
 			ID_HELP,
 			ID_ABOUT,
@@ -112,6 +116,7 @@ class MainWindow : public FXMainWindow
 		long onFileCmd(FXObject*, FXSelector, void*);
 		long onEditCmd(FXObject*, FXSelector, void*);
 		long onProjectCmd(FXObject*, FXSelector, void*);
+		long onViewCmd(FXObject*, FXSelector, void*);
 		long onOptionCmd(FXObject*, FXSelector, void*);
 		long onHelpCmd(FXObject*, FXSelector, void*);
 
@@ -119,8 +124,6 @@ class MainWindow : public FXMainWindow
 
 		/*
 			Constructor: MainWindow
-
-
 		*/
 		MainWindow(InDE* app, const FXString& title);
 

@@ -12,6 +12,8 @@ FXDEFMAP(MainWindow) MainWindowMap[] = {
 								MainWindow::ID_SHIFT_RIGHT,			MainWindow::onEditCmd),
 	FXMAPFUNCS(SEL_COMMAND,		MainWindow::ID_NEW_PROJECT,
 								MainWindow::ID_PROJECT_SETTINGS,	MainWindow::onProjectCmd),
+	FXMAPFUNCS(SEL_COMMAND,		MainWindow::ID_PREV_TAB,
+								MainWindow::ID_NEXT_TAB,			MainWindow::onViewCmd),
 	FXMAPFUNCS(SEL_COMMAND,		MainWindow::ID_SETTINGS,
 								MainWindow::ID_RESET_SETTINGS,		MainWindow::onOptionCmd),
 	FXMAPFUNCS(SEL_COMMAND,		MainWindow::ID_HELP,
@@ -150,6 +152,9 @@ void MainWindow::buildMenu()
 	new FXMenuSeparator(projectMenu);
 	new FXMenuCommand(projectMenu, "&Settings ...", NULL, this, ID_PROJECT_SETTINGS);
 
+	new FXMenuCommand(viewMenu, "View &previous tab", NULL, this, ID_PREV_TAB);
+	new FXMenuCommand(viewMenu, "View &next tab\tCtrl+Tab", NULL, this, ID_NEXT_TAB);
+	new FXMenuSeparator(viewMenu);
 	new FXMenuCascade(viewMenu, "Syntax highlighting ...", NULL, highlightMenu);
 
 	new FXMenuCommand(optionMenu, "&Settings ...", NULL, this, ID_SETTINGS);
@@ -303,6 +308,21 @@ long MainWindow::onOptionCmd(FXObject*, FXSelector sel, void*)
 	return 1;
 }
 
+long MainWindow::onViewCmd(FXObject*, FXSelector sel, void*)
+{
+	FXTRACE((1, "MainWindow::onViewCmd\n"));
+	switch (FXSELID(sel))
+	{
+		case ID_PREV_TAB:
+			editor->showPreviousTab();
+			break;
+		case ID_NEXT_TAB:
+			editor->showNextTab();
+			break;
+	}
+	return 1;
+}
+
 long MainWindow::onHelpCmd(FXObject*, FXSelector sel, void*)
 {
 	FXTRACE((1, "MainWindow::onHelpCmd\n"));
@@ -322,6 +342,7 @@ void MainWindow::readSettings()
 	settings->setDefault("loadProject", true);
 	settings->setDefault("EDITOR", "font", "courier [adobe],90,medium,regular");
 	settings->setDefault("EDITOR", "syntaxFile", "share/syntax.stx");
+	settings->setDefault("EDITOR", "lineNumbers", true);
 	settings->parse();
 }
 
@@ -337,6 +358,7 @@ void MainWindow::applySettings()
 {
 	editor->setFont(settings->getStringValue("EDITOR", "font"));
 	editor->setSyntaxFile(settings->getStringValue("EDITOR", "syntaxFile"));
+	editor->showLineNumbers(settings->getIntValue("EDITOR", "lineNumbers"));
 }
 
 void MainWindow::aboutDialog()
