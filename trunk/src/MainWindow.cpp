@@ -303,13 +303,16 @@ long MainWindow::onProjectCmd(FXObject*, FXSelector sel, void*)
 			// close all projects
 		break;
 		case ID_PROJECT_SETTINGS:
-			active = projectBrowser->getActiveProject().text();
-			for (i = 0; i < projects.no(); ++i)
+			if (projects.no())
 			{
-				if (active == projects[i]->getProjectName())
-					break;
+				active = projectBrowser->getActiveProject().text();
+				for (i = 0; i < projects.no(); ++i)
+				{
+					if (active == projects[i]->getProjectName())
+						break;
+				}
+				editProjectSettings(projects[i]);
 			}
-			editProjectSettings(projects[i]);
 		break;
 	}
 	return 1;
