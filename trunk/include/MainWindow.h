@@ -99,6 +99,10 @@ class MainWindow : public FXMainWindow
 			// Option commands
 			ID_SETTINGS,
 			ID_RESET_SETTINGS,
+			
+			// Help commands
+			ID_HELP,
+			ID_ABOUT,
 
 			ID_LAST,
 		};
@@ -109,6 +113,7 @@ class MainWindow : public FXMainWindow
 		long onEditCmd(FXObject*, FXSelector, void*);
 		long onProjectCmd(FXObject*, FXSelector, void*);
 		long onOptionCmd(FXObject*, FXSelector, void*);
+		long onHelpCmd(FXObject*, FXSelector, void*);
 
 	public:
 
@@ -131,7 +136,7 @@ class MainWindow : public FXMainWindow
 
 		/*
 			Function: getApp
-			
+
 			Returns:
 				The application object
 		*/
@@ -141,7 +146,7 @@ class MainWindow : public FXMainWindow
 
 		/*
 			Function: editSettings
-			
+
 			Opens a dialog (<SettingsDialog>) where the user can edit
 			the application-wide settings
 		*/
@@ -149,31 +154,38 @@ class MainWindow : public FXMainWindow
 
 		/*
 			Function: readSettings
-			
+
 			Reads settings from settings file
 		*/
 		void readSettings();
 
 		/*
 			Function: resetSettings
-			
+
 			Resets InDE settings to defaults
 		*/
 		void resetSettings();
 
 		/*
 			Functon: applySettings
-			
+
 			Applies settings to all widgets which make use of them
 		*/
 		void applySettings();
 
 		/*
 			Function: getEditor
-			
+
 			Returns a pointer to the tabbed editor widget
 		*/
 		TabEditor* getEditor() { return editor; }
+
+		/*
+			Function: aboutDialog
+
+			Creates and displays the about dialog (<AboutDialog>)
+		*/
+		void aboutDialog();
 
 	private:
 

@@ -1,16 +1,17 @@
 1.34
 C/C++
+/home/jannis/Projekte/SVN/inde/trunk/include/AboutDialog.h	1110372098	1	AboutDialog
 /home/jannis/Projekte/SVN/inde/trunk/include/.svn/README.txt	1110307468	0	/home/jannis/Projekte/SVN/inde/trunk/include/.svn/README.txt
 /home/jannis/Projekte/SVN/inde/trunk/include/TabEditor.h	1110308243	1	TabEditor
 /home/jannis/Projekte/SVN/inde/trunk/include/Settings.h	1110308081	1	Settings
 /home/jannis/Projekte/SVN/inde/trunk/include/SyntaxParser.h	1110294834	0	/home/jannis/Projekte/SVN/inde/trunk/include/SyntaxParser.h
-/home/jannis/Projekte/SVN/inde/trunk/include/DialogTitle.h	1110307477	0	/home/jannis/Projekte/SVN/inde/trunk/include/DialogTitle.h
+/home/jannis/Projekte/SVN/inde/trunk/include/DialogTitle.h	1110370959	0	/home/jannis/Projekte/SVN/inde/trunk/include/DialogTitle.h
 /home/jannis/Projekte/SVN/inde/trunk/include/Edit.h	1110308287	1	Edit
-/home/jannis/Projekte/SVN/inde/trunk/include/icons.h	1110309078	0	/home/jannis/Projekte/SVN/inde/trunk/include/icons.h
+/home/jannis/Projekte/SVN/inde/trunk/include/icons.h	1110372350	0	/home/jannis/Projekte/SVN/inde/trunk/include/icons.h
 /home/jannis/Projekte/SVN/inde/trunk/include/SettingsDialog.h	1110308377	1	SettingsDialog
 /home/jannis/Projekte/SVN/inde/trunk/include/InDE.h	1110308029	1	InDE
 /home/jannis/Projekte/SVN/inde/trunk/include/TabItem.h	1110308254	1	TabItem
 /home/jannis/Projekte/SVN/inde/trunk/include/InDESettings.h	1110307474	0	/home/jannis/Projekte/SVN/inde/trunk/include/InDESettings.h
 /home/jannis/Projekte/SVN/inde/trunk/include/FileBrowser.h	1110308101	1	FileBrowser
-/home/jannis/Projekte/SVN/inde/trunk/include/MainWindow.h	1110308061	1	MainWindow
+/home/jannis/Projekte/SVN/inde/trunk/include/MainWindow.h	1110370354	1	MainWindow
 /home/jannis/Projekte/SVN/inde/trunk/include/Hilite.h	1110308273	0	/home/jannis/Projekte/SVN/inde/trunk/include/Hilite.h

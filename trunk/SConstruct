@@ -51,6 +51,12 @@ def makeIcons(dir, config):
 	print
 
 
+def makeAPIDocs(command):
+	print "Making API docs:"
+	print
+	os.popen(command, "w")
+
+
 def printConfig(config):
 	print "Parsing configuration:"
 	print
@@ -86,6 +92,7 @@ env.TargetSignatures("content")
 config = parseConfigFile("project.cfg")
 printConfig(config)
 makeIcons("icons", config)
+makeAPIDocs("bash gendoc.sh")
 
 cpppath = config["INCLUDE_PATHS"].split(",")
 cpppath.append(config["INCLUDE_DIR"])

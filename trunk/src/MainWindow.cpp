@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "SettingsDialog.h"
+#include "AboutDialog.h"
 
 FXDEFMAP(MainWindow) MainWindowMap[] = {
 	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_QUIT,				MainWindow::onQuit),
@@ -13,6 +14,8 @@ FXDEFMAP(MainWindow) MainWindowMap[] = {
 								MainWindow::ID_PROJECT_SETTINGS,	MainWindow::onProjectCmd),
 	FXMAPFUNCS(SEL_COMMAND,		MainWindow::ID_SETTINGS,
 								MainWindow::ID_RESET_SETTINGS,		MainWindow::onOptionCmd),
+	FXMAPFUNCS(SEL_COMMAND,		MainWindow::ID_HELP,
+								MainWindow::ID_ABOUT,				MainWindow::onHelpCmd),
 };
 
 FXIMPLEMENT(MainWindow, FXMainWindow, MainWindowMap, ARRAYNUMBER(MainWindowMap))
@@ -151,6 +154,8 @@ void MainWindow::buildMenu()
 
 	new FXMenuCommand(optionMenu, "&Settings ...", NULL, this, ID_SETTINGS);
 	new FXMenuCommand(optionMenu, "&Reset settings to defaults", NULL, this, ID_RESET_SETTINGS);
+
+	new FXMenuCommand(helpMenu, "&About InDE ...", NULL, this, ID_ABOUT);
 
 	new FXMenuCommand(newMenu, "File\tCtrl+N", NULL, this, ID_NEW_FILE);
 	new FXMenuCommand(newMenu, "Class\tCtrl+Shift+N", NULL, this, ID_NEW_CLASS);
@@ -298,6 +303,19 @@ long MainWindow::onOptionCmd(FXObject*, FXSelector sel, void*)
 	return 1;
 }
 
+long MainWindow::onHelpCmd(FXObject*, FXSelector sel, void*)
+{
+	FXTRACE((1, "MainWindow::onHelpCmd\n"));
+	switch (FXSELID(sel))
+	{
+		case ID_HELP:
+		case ID_ABOUT:
+			aboutDialog();
+			break;
+	}
+	return 1;
+}
+
 void MainWindow::readSettings()
 {
 	settings->setDefault("baseDir", FXFile::getHomeDirectory());
@@ -319,4 +337,18 @@ void MainWindow::applySettings()
 {
 	editor->setFont(settings->getStringValue("EDITOR", "font"));
 	editor->setSyntaxFile(settings->getStringValue("EDITOR", "syntaxFile"));
+}
+
+void MainWindow::aboutDialog()
+{
+	AboutDialog dialog(this, "About InDE SVN");
+	dialog.setProgramName("InDE SVN snapshot");
+	dialog.setDescription("InDE is a cross-platform C/C++ IDE.\n"
+		"It supports managed projects using SCons instead of traditional Makefiles.\n"
+		"The GUI is built on the top of the FOX-Toolkit, which probably is the fastest toolkit available for linux.");
+	dialog.setLicense("GNU GPL");
+	dialog.setCopyright("© 2005, Jannis Pohlmann and Jochen Rassler");
+	dialog.addDeveloper("Jannis Pohlmann", "devel@sten-net.de", "Head developer, Coordinator");
+	dialog.addDeveloper("Jochen Rassler", "jochen@cornmania.de", "Developer (project management)");
+	dialog.run();
 }
