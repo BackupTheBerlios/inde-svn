@@ -21,7 +21,7 @@ MainWindow::MainWindow(InDE* app, const FXString& title)
 :	FXMainWindow(app, title, NULL, NULL, DECOR_ALL, 0, 0, 800, 600)
 {
 #ifdef WIN32
-	settings = new Settings(FXFile::getHomeDirectory() + "/InDE/settings.ini");
+	settings = new Settings(FXFile::getHomeDirectory() + "\\InDE\\settings.ini");
 #else
 	settings = new Settings(FXFile::getHomeDirectory() + "/.InDE/settings");
 #endif
