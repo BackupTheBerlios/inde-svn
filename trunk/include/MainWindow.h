@@ -87,6 +87,14 @@ class MainWindow : public FXMainWindow
 			ID_PROJECT_SRCDIR,
 			ID_PROJECT_INCLUDEDIR,
 			ID_PROJECT_BINDIR,
+			ID_PROJECT_INCLUDEPATHES,
+			ID_PROJECT_LIBRARYPATHES,
+			ID_PROJECT_LIBRARIES,
+			ID_PROJECT_DEBUG,
+			ID_PROJECT_PIC,
+			ID_PROJECT_WARNINGS,
+			ID_PROJECT_DEFINES,
+			ID_PROJECT_SWITCHES,
 			ID_ABOUT,
 			ID_LAST,
 		};
@@ -124,6 +132,22 @@ class MainWindow : public FXMainWindow
 		long onUpdProjectIncludeDir(FXObject*, FXSelector, void*);
 		long onCmdProjectBinDir(FXObject*, FXSelector, void*);
 		long onUpdProjectBinDir(FXObject*, FXSelector, void*);
+		long onCmdProjectIncludePathes(FXObject*, FXSelector, void*);
+		long onUpdProjectIncludePathes(FXObject*, FXSelector, void*);
+		long onCmdProjectLibraryPathes(FXObject*, FXSelector, void*);
+		long onUpdProjectLibraryPathes(FXObject*, FXSelector, void*);
+		long onCmdProjectLibraries(FXObject*, FXSelector, void*);
+		long onUpdProjectLibraries(FXObject*, FXSelector, void*);
+		long onCmdProjectDebug(FXObject*, FXSelector, void*);
+		long onUpdProjectDebug(FXObject*, FXSelector, void*);
+		long onCmdProjectPic(FXObject*, FXSelector, void*);
+		long onUpdProjectPic(FXObject*, FXSelector, void*);
+		long onCmdProjectWarnings(FXObject*, FXSelector, void*);
+		long onUpdProjectWarnings(FXObject*, FXSelector, void*);
+		long onCmdProjectDefines(FXObject*, FXSelector, void*);
+		long onUpdProjectDefines(FXObject*, FXSelector, void*);
+		long onCmdProjectSwitches(FXObject*, FXSelector, void*);
+		long onUpdProjectSwitches(FXObject*, FXSelector, void*);
 	
 	public:
 	

@@ -60,18 +60,27 @@ NewProjectWizard::NewProjectWizard(MainWindow* owner, const FXString& name)
 
 	// Step 3:
 	step3 = new FXVerticalFrame(getContainer(), LAYOUT_FILL_X|LAYOUT_FILL_Y);
-	new DialogTitle(step3, _("Step3"));
-	new FXLabel(step3, _("Hier kommen die Menüpunkte...."));
+	new DialogTitle(step3, _("Libraries"));
+	new FXLabel(step3, _("Additional include pathes (comma separated list)"));
+	includePathes = new FXTextField(step3, 60, this, MainWindow::ID_PROJECT_INCLUDEPATHES);
+	new FXLabel(step3, _("Additional library pathes (comma separated list)"));
+	libraryPathes = new FXTextField(step3, 60, this, MainWindow::ID_PROJECT_LIBRARYPATHES);
+	new FXLabel(step3, _("Additional libraries (comma separated list, without suffix and prefix)"));
+	libraries = new FXTextField(step3, 60, this, MainWindow::ID_PROJECT_LIBRARIES);
 
-	// Step 4:
+	// Step 4: compiler options
 	step4 = new FXVerticalFrame(getContainer(), LAYOUT_FILL_X|LAYOUT_FILL_Y);
-	new DialogTitle(step4, _("Step4"));
-	new FXLabel(step4, _("Hier kommen die Menüpunkte...."));
+	new DialogTitle(step4, _("Compiler options"));
+	FXHorizontalFrame *hf = new FXHorizontalFrame(step4, LAYOUT_FILL_Y);
+	debug = new FXCheckButton(hf, _("enable debug symbols"), this, MainWindow::ID_PROJECT_DEBUG);
+	pic = new FXCheckButton(hf, _("-PIC"), this, MainWindow::ID_PROJECT_PIC);
+	new FXLabel(step4, _("warnings (comma separated list)"));
+	warnings = new FXTextField(step4, 60, this, MainWindow::ID_PROJECT_WARNINGS);
+	new FXLabel(step4, _("defines (comma separated list)"));
+	defines = new FXTextField(step4, 60, this, MainWindow::ID_PROJECT_DEFINES);
+	new FXLabel(step4, _("additional switches (comma separated list)"));
+	switches = new FXTextField(step4, 60, this, MainWindow::ID_PROJECT_SWITCHES);
 
-	// Step 5:
-	step5 = new FXVerticalFrame(getContainer(), LAYOUT_FILL_X|LAYOUT_FILL_Y);
-	new DialogTitle(step5, _("Step5"));
-	new FXLabel(step5, _("Hier kommen die Menüpunkte...."));
 
 }
 
@@ -94,7 +103,6 @@ NewProjectWizard::~NewProjectWizard()
 	delete step2;
 	delete step3;
 	delete step4;
-	delete step5;
 }
 
 

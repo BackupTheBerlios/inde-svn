@@ -28,7 +28,7 @@ struct ProjectDirectorySettings {
 
 struct ProjectCompilerSettings {
 	FXString	warnings;
-	FXString	definings;
+	FXString	defines;
 	FXString	additionalSwitches;
 	FXbool		debug;
 	FXbool		pic;

@@ -16,7 +16,6 @@ class NewProjectWizard : public FXWizard  {
 		FXVerticalFrame	*step2;
 		FXVerticalFrame	*step3;
 		FXVerticalFrame	*step4;
-		FXVerticalFrame	*step5;
 
 		// step 1 vars
 		FXTextField		*nameField;
@@ -25,9 +24,21 @@ class NewProjectWizard : public FXWizard  {
 		FXTextField		*versionField;
 
 		// step 2 vars
+		FXTextField		*includePathes;
+		FXTextField		*libraryPathes;
+		FXTextField		*libraries;
+
+		// step 3: pathes
 		FXTextField		*srcDir;
 		FXTextField		*includeDir;
 		FXTextField		*binDir;
+
+		// step 4: compiler options
+		FXTextField		*warnings;
+		FXTextField		*defines;
+		FXTextField		*switches;
+		FXCheckButton	*debug;
+		FXCheckButton	*pic;
 
 	protected:
 		NewProjectWizard() {};

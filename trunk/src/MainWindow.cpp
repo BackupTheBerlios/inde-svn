@@ -43,6 +43,23 @@ FXDEFMAP(MainWindow) MainWindowMap[] = {
 	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_INCLUDEDIR, MainWindow::onUpdProjectIncludeDir),
 	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_BINDIR, MainWindow::onCmdProjectBinDir),
 	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_BINDIR, MainWindow::onUpdProjectBinDir),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_INCLUDEPATHES, MainWindow::onCmdProjectIncludePathes),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_INCLUDEPATHES, MainWindow::onUpdProjectIncludePathes),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_LIBRARYPATHES, MainWindow::onCmdProjectLibraryPathes),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_LIBRARYPATHES, MainWindow::onUpdProjectLibraryPathes),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_LIBRARIES, MainWindow::onCmdProjectLibraries),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_LIBRARIES, MainWindow::onUpdProjectLibraries),
+
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_DEBUG, MainWindow::onCmdProjectDebug),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_DEBUG, MainWindow::onUpdProjectDebug),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_PIC, MainWindow::onCmdProjectPic),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_PIC, MainWindow::onUpdProjectPic),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_WARNINGS, MainWindow::onCmdProjectWarnings),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_WARNINGS, MainWindow::onUpdProjectWarnings),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_DEFINES, MainWindow::onCmdProjectDefines),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_DEFINES, MainWindow::onUpdProjectDefines),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_SWITCHES, MainWindow::onCmdProjectSwitches),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_SWITCHES, MainWindow::onUpdProjectSwitches),
 };
 
 
@@ -404,6 +421,126 @@ long MainWindow::onCmdProjectBinDir(FXObject*, FXSelector, void* ptr)
 long MainWindow::onUpdProjectBinDir(FXObject* sender, FXSelector, void* ptr)
 {
 	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.dirs.binDir);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectIncludePathes(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.libs.includePathes = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectIncludePathes(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.libs.includePathes);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectLibraryPathes(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.libs.libraryPathes = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectLibraryPathes(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.libs.libraryPathes);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectLibraries(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.libs.libraries = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectLibraries(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.libs.libraries);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectDebug(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.compiler.debug = (FXbool)(FXival)ptr;
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectDebug(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETINTVALUE), (void*)(FXival)&projectSettings.compiler.debug);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectPic(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.compiler.pic = (FXbool)(FXival)ptr;
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectPic(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETINTVALUE), (void*)(FXival)&projectSettings.compiler.pic);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectWarnings(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.compiler.warnings = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectWarnings(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.compiler.warnings);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectDefines(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.compiler.defines = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectDefines(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.compiler.defines);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectSwitches(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.compiler.additionalSwitches = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectSwitches(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.compiler.additionalSwitches);
 	return 1;
 }
 
