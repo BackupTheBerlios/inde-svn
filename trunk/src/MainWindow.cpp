@@ -72,6 +72,12 @@ FXDEFMAP(MainWindow) MainWindowMap[] = {
 	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_DEFINES, 			MainWindow::onUpdProjectDefines),
 	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_SWITCHES, 			MainWindow::onCmdProjectSwitches),
 	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_SWITCHES, 			MainWindow::onUpdProjectSwitches),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_AUTHOR, 				MainWindow::onCmdProjectAuthor),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_AUTHOR, 				MainWindow::onUpdProjectAuthor),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_LICENSE, 				MainWindow::onCmdProjectLicense),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_LICENSE, 				MainWindow::onUpdProjectLicense),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_PROJECT_LICENSEHEADER, 				MainWindow::onCmdProjectLicenseHeader),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_PROJECT_LICENSEHEADER, 				MainWindow::onUpdProjectLicenseHeader),
 };
 
 FXIMPLEMENT(MainWindow, FXMainWindow, MainWindowMap, ARRAYNUMBER(MainWindowMap));
@@ -690,6 +696,50 @@ long MainWindow::onUpdProjectSwitches(FXObject* sender, FXSelector, void* ptr)
 	return 1;
 }
 
+long MainWindow::onCmdProjectAuthor(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.general.author = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectAuthor(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.general.author);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectLicense(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.general.license = (FXint)(FXival)ptr;
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectLicense(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXival)&projectSettings.general.license);
+	return 1;
+}
+
+
+long MainWindow::onCmdProjectLicenseHeader(FXObject*, FXSelector, void* ptr)
+{
+	projectSettings.general.licenseHeader = (FXString)(FXchar*)ptr;
+	projectSettingsDirty = TRUE;
+	return 1;
+}
+
+
+long MainWindow::onUpdProjectLicenseHeader(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&projectSettings.general.licenseHeader);
+	return 1;
+}
+
 
 long MainWindow::onCmdProjectWriteConfig(FXObject*, FXSelector, void*)
 {
@@ -710,6 +760,9 @@ long MainWindow::onCmdProjectWriteConfig(FXObject*, FXSelector, void*)
 	config.writeStringEntry("Compiler", "warnings", projectSettings.compiler.warnings.text());
 	config.writeStringEntry("Compiler", "defines", projectSettings.compiler.defines.text());
 	config.writeStringEntry("Compiler", "switches", projectSettings.compiler.switches.text());
+	config.writeStringEntry("General", "author", projectSettings.general.author.text());
+	config.writeIntEntry("General", "license", projectSettings.general.license);
+	config.writeStringEntry("General", "licenseHeader", projectSettings.general.licenseHeader.text());
 	config.unparseFile(projectConfigFile);
 	return 1;
 }
@@ -724,6 +777,20 @@ long MainWindow::onCmdProjectLoadConfig(FXObject*, FXSelector, void*)
 	projectSettings.general.description = config.readStringEntry("General", "description", "");
 	projectSettings.general.target = config.readStringEntry("General", "target", PROJECT_BUILD_EXECUTABLE);
 	projectSettings.general.version = config.readStringEntry("General", "version", "");
+	projectSettings.directories.source = config.readStringEntry("Directories", "source", "");
+	projectSettings.directories.include = config.readStringEntry("Directories", "include", "");
+	projectSettings.directories.build = config.readStringEntry("Directories", "build", "");
+	projectSettings.libraries.includePaths = config.readStringEntry("Libraries", "includePaths", "");
+	projectSettings.libraries.libraryPaths = config.readStringEntry("Libraries", "libraryPaths", "");
+	projectSettings.libraries.libraries = config.readStringEntry("Libraries", "libraries", "");
+	projectSettings.compiler.debug = config.readIntEntry("Compiler", "debug", 0);
+	projectSettings.compiler.pic = config.readIntEntry("Compiler", "PIC", 0);
+	projectSettings.compiler.warnings = config.readStringEntry("Compiler", "warnings", "");
+	projectSettings.compiler.defines = config.readStringEntry("Compiler", "defines", "");
+	projectSettings.compiler.switches = config.readStringEntry("Compiler", "switches", "");
+	projectSettings.general.author = config.readStringEntry("General", "author", "");
+	projectSettings.general.license = config.readIntEntry("General", "license", 0);
+	projectSettings.general.licenseHeader = config.readStringEntry("General", "licenseHeader", "");
 }
 
 
@@ -756,7 +823,7 @@ long MainWindow::onCmdOpenProject(FXObject*, FXSelector, void*)
 		handle(this, FXSEL(SEL_COMMAND, MainWindow::ID_PROJECT_CLOSE), NULL);
 		if (!openProject(dialog.getDirectory()))
 		{
-			FXMessageBox::error(this, MBOX_OK, "Error", "Directory doesn't seem to contain a InDE project. Doesn a project.cfg exist?");
+			FXMessageBox::error(this, MBOX_OK, "Error", "Directory doesn't seem to contain a InDE project. Doesn't a project.cfg exist?");
 		}
 	}
 	return 1;

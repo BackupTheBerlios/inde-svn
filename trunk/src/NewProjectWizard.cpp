@@ -6,7 +6,7 @@ class MainWindow;
 // Message map
 
 FXDEFMAP(NewProjectWizard) NewProjectWizardMap[] = {
-	0,
+	FXMAPFUNC(SEL_COMMAND, NewProjectWizard::ID_SELECTLICENSEFILE, NewProjectWizard::onCmdSelectLicenseHeader),
 };
 
 
@@ -37,9 +37,15 @@ NewProjectWizard::NewProjectWizard(MainWindow* owner, const FXString& name)
 	tgtSwitches(switches),
 	tgtDebug(debug),
 	tgtPic(pic),
+	tgtAuthor(author),
+	tgtLicense(license),
+	tgtLicenseHeader(licenseHeader),
 	srcDir("src/"),
 	includeDir("include/"),
-	buildDir("build/")
+	buildDir("build/"),
+	license(PROJECT_LICENSE_GPL),
+	debug(1),
+	pic(0)
 {
 	// Step 1: General project settings
 	step1 = new FXVerticalFrame(getContainer(), LAYOUT_FILL_X|LAYOUT_FILL_Y);
@@ -92,16 +98,30 @@ NewProjectWizard::NewProjectWizard(MainWindow* owner, const FXString& name)
 	step4 = new FXVerticalFrame(getContainer(), LAYOUT_FILL_X|LAYOUT_FILL_Y);
 	new DialogTitle(step4, "Compiler and linker options");
 	FXHorizontalFrame *hf = new FXHorizontalFrame(step4, LAYOUT_FILL_Y);
-	new FXCheckButton(hf, "Enable debug symbols:", &tgtDebug, FXDataTarget::ID_VALUE);
-	new FXLabel(hf, "Enable debug symbols");
+	new FXCheckButton(hf, "Enable debug symbols", &tgtDebug, FXDataTarget::ID_VALUE);
 	new FXCheckButton(hf, "-PIC", &tgtPic, FXDataTarget::ID_VALUE);
-	new FXLabel(hf, "-PIC");
 	new FXLabel(step4, "Warnings (comma separated list)");
 	new FXTextField(step4, 60, &tgtWarnings, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
 	new FXLabel(step4, "Defines (comma separated list)");
 	new FXTextField(step4, 60, &tgtDefines, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
 	new FXLabel(step4, "Additional switches (comma separated list)");
 	new FXTextField(step4, 60, &tgtSwitches, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
+
+	// step 5: author and license 
+	step5 = new FXVerticalFrame(getContainer(), LAYOUT_FILL_X|LAYOUT_FILL_Y);
+	new DialogTitle(step5, "Author and License");
+	FXVerticalFrame *vf = new FXVerticalFrame(step5, LAYOUT_FILL_X|LAYOUT_FILL_Y);
+	new FXLabel(vf, "Author's name");
+	new FXTextField(vf, 60, &tgtAuthor, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
+	FXGroupBox *gp = new FXGroupBox(step5, "choose license");
+	FXMatrix *mat = new FXMatrix(gp, 5, MATRIX_BY_COLUMNS|LAYOUT_FILL_X);
+	new FXRadioButton(mat, "GPL", &tgtLicense, FXDataTarget::ID_OPTION+PROJECT_LICENSE_GPL);
+	new FXRadioButton(mat, "LGPL", &tgtLicense, FXDataTarget::ID_OPTION+PROJECT_LICENSE_LGPL);
+	new FXRadioButton(mat, "user defined", &tgtLicense, FXDataTarget::ID_OPTION+PROJECT_LICENSE_USER);
+	new FXLabel(step5, "user defined license header file");
+	FXHorizontalFrame *hfa = new FXHorizontalFrame(step5, LAYOUT_FILL_X);
+	new FXTextField(hfa, 60, &tgtLicenseHeader, FXDataTarget::ID_VALUE, LAYOUT_FILL_X|TEXTFIELD_NORMAL);
+	new FXButton(hfa, "Select", NULL, this, ID_SELECTLICENSEFILE, BUTTON_NORMAL, 0, 0, 0, 0, 12, 12, 2, 2);
 }
 
 
@@ -154,8 +174,34 @@ FXbool NewProjectWizard::check()
 		FXMessageBox::error(this, MBOX_OK, "Error", "Please define a project version.");
 	}
 	
+	if (!errors && author.empty())
+	{
+		errors++;
+		FXMessageBox::error(this, MBOX_OK, "Error", "Please enter author's name.");
+	}
+
+	if (!errors && licenseHeader.empty() && license == PROJECT_LICENSE_USER)
+	{
+		errors++;
+		FXMessageBox::error(this, MBOX_OK, "Error", "Please select license header file.");
+	}
+
 	if (errors)
 		getContainer()->setCurrent(0);	
 	
 	return errors == 0;
 }
+
+
+long NewProjectWizard::onCmdSelectLicenseHeader(FXObject*, FXSelector, void*)
+{
+	FXFileDialog dialog(this, "Select license file");
+	dialog.setDirectory(((MainWindow*)(getOwner()))->settings.general.baseDir);
+	if (dialog.execute())
+	{
+		licenseHeader = dialog.getFilename();
+	}
+	return 1;
+}
+
+

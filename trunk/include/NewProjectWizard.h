@@ -19,6 +19,9 @@ class NewProjectWizard : public FXWizard  {
 		FXString		description;
 		FXString		target;
 		FXString		version;
+		FXString		author;
+		FXint			license;
+		FXString		licenseHeader;
 		
 		FXString		includePaths;
 		FXString		libraryPaths;
@@ -55,6 +58,10 @@ class NewProjectWizard : public FXWizard  {
 		FXDataTarget	tgtSwitches;
 		FXDataTarget	tgtDebug;
 		FXDataTarget	tgtPic;
+
+		FXDataTarget	tgtAuthor;
+		FXDataTarget	tgtLicense;
+		FXDataTarget	tgtLicenseHeader;
 	
 	private:
 
@@ -62,6 +69,7 @@ class NewProjectWizard : public FXWizard  {
 		FXVerticalFrame* step2;
 		FXVerticalFrame* step3;
 		FXVerticalFrame* step4;
+		FXVerticalFrame* step5;
 
 	protected:
 		NewProjectWizard() {};
@@ -70,11 +78,12 @@ class NewProjectWizard : public FXWizard  {
 
 	public:
 		enum {
-			ID_SELF = FXWizard::ID_LAST,
+			ID_SELECTLICENSEFILE = FXWizard::ID_LAST,
 			ID_LAST
 		};
 
 	public:
+		long onCmdSelectLicenseHeader(FXObject*, FXSelector, void*);
 				
 	public:
 	

@@ -9,6 +9,9 @@ struct ProjectGeneralSettings {
 	FXString	description;
 	FXString	target;
 	FXString	version;
+	FXString	author;
+	FXint		license;
+	FXString	licenseHeader;
 };
 
 struct ProjectLibrarySettings {
