@@ -1,6 +1,6 @@
 #include "InDE.h"
 
-struct InDESettings;	// Defined in MainWindow.h
+class MainWindow;
 
 
 //////////////////////////////////////////////////
@@ -17,21 +17,23 @@ class SettingsDialog : public FXDialogBox
 	
 	private:
 		DialogTitle*		title;
-		InDESettings*		settings;
+		FXTextField*		inputBaseDir;
 	
 	public:
 		enum {
 			ID_ACCEPT = FXDialogBox::ID_LAST,
+			ID_SELECTBASEDIR,
 			ID_LAST,
 		};
 		
 	public:
 		long onCmdAccept(FXObject*, FXSelector, void*);
+		long onCmdSelectBaseDir(FXObject*, FXSelector, void*);
 		
 	public:
 	
 		// Constructor
-		SettingsDialog(FXWindow* p, InDESettings* settings, const FXString& name);
+		SettingsDialog(MainWindow* owner, const FXString& name);
 		
 		// Create
 		virtual void create();

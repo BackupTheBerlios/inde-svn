@@ -18,6 +18,7 @@
 #include "icons.h"
 #include "Hilite.h"
 #include "SyntaxParser.h"
+#include "InDESettings.h"
 #include "DialogTitle.h"
 #include "SettingsDialog.h"
 #include "MainWindow.h"

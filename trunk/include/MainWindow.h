@@ -11,14 +11,6 @@ typedef FXArray<FXHiliteStyle> FXHiliteArray;
 
 
 //////////////////////////////////////////////////
-// InDE settings struct
-
-struct InDESettings {
-	FXString	baseDir;
-};
-
-
-//////////////////////////////////////////////////
 // Main window class
 
 class MainWindow : public FXMainWindow
@@ -56,12 +48,8 @@ class MainWindow : public FXMainWindow
 		FXDirList*				projectBrowser;
 		FXTextField*			clock;
 		
-		// Dialogs
-		SettingsDialog*			settingsDialog;
-		
 		// Settings
 		InDESettings			settings;
-		FXDataTarget			baseDir;
 		
 		// Syntax
 		FXSyntax*				syntax;
@@ -86,6 +74,10 @@ class MainWindow : public FXMainWindow
 			ID_LOADSETTINGS,
 			ID_SAVESETTINGS,
 			ID_SETTINGS,
+			ID_SETTINGS_BASEDIR,
+			ID_SETTINGS_SAVEONTAB,
+			ID_SETTINGS_AUTOSAVE,
+			ID_SETTINGS_AUTOSAVE_INTERVAL,
 			ID_ABOUT,
 			ID_LAST,
 		};
@@ -95,9 +87,19 @@ class MainWindow : public FXMainWindow
 		long onCmdQuit(FXObject*, FXSelector, void*);
 		long onCmdNew(FXObject*, FXSelector, void*);
 		long onCmdNewProject(FXObject*, FXSelector, void*);
+		
 		long onCmdSaveSettings(FXObject*, FXSelector, void*);
 		long onCmdLoadSettings(FXObject*, FXSelector, void*);
 		long onCmdSettings(FXObject*, FXSelector, void*);
+		
+		long onCmdSettingBaseDir(FXObject*, FXSelector, void*);
+		long onUpdSettingBaseDir(FXObject*, FXSelector, void*);
+		long onCmdSettingSaveOnTab(FXObject*, FXSelector, void*);
+		long onUpdSettingSaveOnTab(FXObject*, FXSelector, void*);
+		long onCmdSettingAutosave(FXObject*, FXSelector, void*);
+		long onUpdSettingAutosave(FXObject*, FXSelector, void*);
+		long onCmdSettingAutosaveInterval(FXObject*, FXSelector, void*);
+		long onUpdSettingAutosaveInterval(FXObject*, FXSelector, void*);
 	
 	public:
 	

@@ -1,27 +1,48 @@
 #include "InDE.h"
 
+
+//////////////////////////////////////////////////
+// Message map
+
+
 FXDEFMAP(MainWindow) MainWindowMap[] = {
-	FXMAPFUNC(SEL_CLOSE,			0,								MainWindow::onCmdQuit),
-	FXMAPFUNC(SEL_SIGNAL,			MainWindow::ID_QUIT,			MainWindow::onCmdQuit),
-	FXMAPFUNC(SEL_COMMAND,			MainWindow::ID_QUIT,			MainWindow::onCmdQuit),
+	FXMAPFUNC(SEL_CLOSE,		0,										MainWindow::onCmdQuit),
+	FXMAPFUNC(SEL_SIGNAL,		MainWindow::ID_QUIT,					MainWindow::onCmdQuit),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_QUIT,					MainWindow::onCmdQuit),
 	
 	// File
-	FXMAPFUNC(SEL_COMMAND,			MainWindow::ID_NEW,				MainWindow::onCmdNew),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_NEW,						MainWindow::onCmdNew),
 	
 	// Project
-	FXMAPFUNC(SEL_COMMAND,			MainWindow::ID_NEWPROJECT,		MainWindow::onCmdNewProject),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_NEWPROJECT,				MainWindow::onCmdNewProject),
 	
 	// Settings
-	FXMAPFUNC(SEL_COMMAND,			MainWindow::ID_SAVESETTINGS,	MainWindow::onCmdSaveSettings),
-	FXMAPFUNC(SEL_COMMAND,			MainWindow::ID_LOADSETTINGS,	MainWindow::onCmdLoadSettings),
-	FXMAPFUNC(SEL_COMMAND,			MainWindow::ID_SETTINGS,		MainWindow::onCmdSettings),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_SAVESETTINGS,			MainWindow::onCmdSaveSettings),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_LOADSETTINGS,			MainWindow::onCmdLoadSettings),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_SETTINGS,				MainWindow::onCmdSettings),
+
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_SETTINGS_BASEDIR,		MainWindow::onCmdSettingBaseDir),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_SETTINGS_BASEDIR,		MainWindow::onUpdSettingBaseDir),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_SETTINGS_SAVEONTAB,		MainWindow::onCmdSettingSaveOnTab),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_SETTINGS_SAVEONTAB,		MainWindow::onUpdSettingSaveOnTab),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_SETTINGS_AUTOSAVE,		MainWindow::onCmdSettingAutosave),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_SETTINGS_AUTOSAVE,		MainWindow::onUpdSettingAutosave),
+	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_SETTINGS_AUTOSAVE_INTERVAL, MainWindow::onCmdSettingAutosaveInterval),
+	FXMAPFUNC(SEL_UPDATE,		MainWindow::ID_SETTINGS_AUTOSAVE_INTERVAL, MainWindow::onUpdSettingAutosaveInterval),
 };
+
+
+//////////////////////////////////////////////////
+// Object implementation
 
 FXIMPLEMENT(MainWindow, FXMainWindow, MainWindowMap, ARRAYNUMBER(MainWindowMap))
 
+
+//////////////////////////////////////////////////
+// Main window constructor
+
 MainWindow::MainWindow(FXApp* a, const FXString& title)
-:	FXMainWindow(a, title, NULL, NULL, DECOR_ALL, 0, 0, 800, 600),
-	baseDir(settings.baseDir)
+:	FXMainWindow(a, title, NULL, NULL, DECOR_ALL, 0, 0, 800, 600)
 {	
 	// Status bar
 	statusBar = new FXStatusBar(this, LAYOUT_SIDE_BOTTOM|LAYOUT_FILL_X|STATUSBAR_WITH_DRAGCORNER|FRAME_RAISED);
@@ -71,14 +92,10 @@ MainWindow::MainWindow(FXApp* a, const FXString& title)
 	helpMenu = new FXMenuPane(this);
 	new FXMenuTitle(menuBar, _("Help"), NULL, helpMenu);
 	
-	//////////////////////////////////////////////
 	// Menu commands
-
 	new FXMenuCommand(fileMenu, _("New File\tCtrl+N"), NULL, this, ID_NEW);
 	new FXMenuCommand(fileMenu, _("Quit\tCtrl+Q\tHallo"), NULL, this, ID_QUIT);
-	
 	new FXMenuCommand(projectMenu, _("Create new Project"), NULL, this, ID_NEWPROJECT);
-	
 	new FXMenuCommand(preferencesMenu, _("InDE settings"), NULL, this, ID_SETTINGS);
 	
 	// Splitter
@@ -111,18 +128,17 @@ MainWindow::MainWindow(FXApp* a, const FXString& title)
 	
 	// Editor frame
 	FXVerticalFrame* editorFrame = new FXVerticalFrame(splitter, LAYOUT_FILL_X|LAYOUT_FILL_Y, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	
-	// InDE settings dialog
-	settingsDialog = new SettingsDialog(this, &settings, _("InDE settings"));
 }
+
 
 void 
 MainWindow::create()
 {
 	FXMainWindow::create();
-	loadSettings();	
+	loadSettings();
 	show(PLACEMENT_SCREEN);
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -140,43 +156,117 @@ MainWindow::~MainWindow()
 	delete rightDock;
 }
 
+
 long MainWindow::onCmdQuit(FXObject*, FXSelector, void*)
 {
 	saveSettings();
 	getApp()->exit(0);
 }
 
+
 long MainWindow::onCmdNew(FXObject*, FXSelector, void*)
 {
 	return 1;
 }
+
 
 long MainWindow::onCmdNewProject(FXObject*, FXSelector, void*)
 {
 	return 1;
 }
 
+
 void MainWindow::loadSettings()
 {
 	this->handle(this, FXSEL(SEL_COMMAND, MainWindow::ID_LOADSETTINGS), NULL);
 }
+
 
 void MainWindow::saveSettings()
 {
 	this->handle(this, FXSEL(SEL_COMMAND, MainWindow::ID_SAVESETTINGS), NULL);
 }
 
+
 long MainWindow::onCmdSaveSettings(FXObject*, FXSelector, void*)
 {
-	getApp()->reg().writeStringEntry("SETTINGS", "baseDir", settings.baseDir.text());
+	getApp()->reg().writeStringEntry("General", "baseDir", settings.general.baseDir.text());
+	getApp()->reg().writeIntEntry("Saving", "saveOnTabSwitch", settings.saving.saveOnTabSwitch);
+	getApp()->reg().writeIntEntry("Saving", "autosave", settings.saving.autosave);
+	getApp()->reg().writeIntEntry("Saving", "autosaveInterval", settings.saving.autosaveInterval);
 }
+
 
 long MainWindow::onCmdLoadSettings(FXObject*, FXSelector, void*)
 {
-	settings.baseDir = getApp()->reg().readStringEntry("SETTINGS", "baseDir", FXFile::getHomeDirectory().text());
+	settings.general.baseDir = getApp()->reg().readStringEntry("General", "baseDir", FXFile::getHomeDirectory().text());
+	settings.saving.saveOnTabSwitch = getApp()->reg().readIntEntry("Saving", "saveOnTabSwitch", 0);
+	settings.saving.autosave = getApp()->reg().readIntEntry("Saving", "autosave", 0);
+	settings.saving.autosaveInterval = getApp()->reg().readIntEntry("Saving", "autosaveInterval", 0);
 }
+
 
 long MainWindow::onCmdSettings(FXObject*, FXSelector, void*)
 {
-	settingsDialog->execute();
+	SettingsDialog dialog(this, _("InDE settings"));
+	if (dialog.execute())
+	{
+		saveSettings();
+	}
+}
+
+
+long MainWindow::onCmdSettingBaseDir(FXObject*, FXSelector, void* ptr)
+{
+	settings.general.baseDir = (FXString)(FXchar*)ptr;
+	return 1;
+}
+
+
+long MainWindow::onUpdSettingBaseDir(FXObject* sender, FXSelector sel, void*)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETSTRINGVALUE), (void*)(FXchar*)&settings.general.baseDir);
+	return 1;
+}
+
+
+long MainWindow::onCmdSettingSaveOnTab(FXObject*, FXSelector, void* ptr)
+{
+	settings.saving.saveOnTabSwitch = (FXbool)(FXival)ptr;
+	return 1;
+}
+
+
+long MainWindow::onUpdSettingSaveOnTab(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETINTVALUE), (void*)(FXival)&settings.saving.saveOnTabSwitch);
+	return 1;
+}
+
+
+long MainWindow::onCmdSettingAutosave(FXObject*, FXSelector, void* ptr)
+{
+	settings.saving.autosave = (FXbool)(FXival)ptr;
+	return 1;
+}
+
+
+long MainWindow::onUpdSettingAutosave(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETINTVALUE), (void*)(FXival)&settings.saving.autosave);
+	return 1;
+}
+
+
+long MainWindow::onCmdSettingAutosaveInterval(FXObject*, FXSelector, void* ptr)
+{
+	settings.saving.autosaveInterval = (FXint)(FXival)ptr;
+	return 1;
+}
+
+
+long MainWindow::onUpdSettingAutosaveInterval(FXObject* sender, FXSelector, void* ptr)
+{
+	sender->handle(this, FXSEL(SEL_COMMAND, ID_SETINTVALUE), (void*)(FXival)&settings.saving.autosaveInterval);
+	return 1;
 }
