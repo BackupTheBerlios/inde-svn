@@ -6,10 +6,13 @@
 #include "Settings.h"
 #include "FileBrowser.h"
 #include "TabEditor.h"
+#include "ProjectBrowser.h"
+#include "ProjectSettings.h"
 
 class InDE;
 class FileBrowser;
 class TabEditor;
+class ProjectBrowser;
 
 /*
 	Class: MainWindow
@@ -33,10 +36,21 @@ class MainWindow : public FXMainWindow
 		*/
 		Settings*						settings;
 
-	private:
-		FXObjectListOf<FXString>*		projects;
-		FXSettings*						projectSettings;
+		/*
+			Variable: projects
 
+			ProjectSettings for all opened projects
+		*/
+		FXObjectListOf<ProjectSettings>	projects;
+
+		/*
+			Variable: projectBrowser
+
+			project browser
+		*/
+		ProjectBrowser*					projectBrowser;
+
+	private:
 		FXDockSite*						topDock;
 		FXDockSite*						leftDock;
 		FXDockSite*						rightDock;
@@ -57,7 +71,6 @@ class MainWindow : public FXMainWindow
 		FXTabBook*						browserFrame;
 		FileBrowser*					fileBrowser;
 		FXComboBox*						fileFilter;
-		FXDirList*						projectBrowser;
 		FXComboBox*						projectFilter;
 
 		TabEditor*						editor;
@@ -93,7 +106,7 @@ class MainWindow : public FXMainWindow
 			ID_NEW_PROJECT,
 			ID_OPEN_PROJECT,
 			ID_CLOSE_PROJECT,
-			ID_CLOSE_PROJECTS,
+			ID_CLOSE_ALL_PROJECTS,
 			ID_PROJECT_SETTINGS,
 
 			// View commands
@@ -175,6 +188,34 @@ class MainWindow : public FXMainWindow
 			Applies settings to all widgets which make use of them
 		*/
 		void applySettings();
+
+		/*
+			Function: newProject
+
+			Creates a new project and adds it to the project list
+		*/
+		void newProject();
+	
+		/*
+			Function: openProject
+		*/
+		FXbool openProject(const FXString& location = "");
+
+		/*
+			Function: editProjectSettings
+
+			Opens a dialog (<ProjectSettingsDialog>) where the user can edit
+			the project settings
+		*/
+		void editProjectSettings(ProjectSettings* settings);
+
+
+		/*
+			Functon: applyProjectSettings
+
+			Applies project settings to all widgets which make use of them
+		*/
+		void applyProjectSettings();
 
 		/*
 			Function: getEditor

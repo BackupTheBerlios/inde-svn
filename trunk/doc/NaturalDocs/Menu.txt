@@ -36,8 +36,13 @@ File: Edit  (Edit.h)
 File: FileBrowser  (FileBrowser.h)
 File: InDE  (InDE.h)
 File: MainWindow  (MainWindow.h)
+File: NewProjectWizard  (NewProjectWizard.h)
+File: ProjectBrowser  (ProjectBrowser.h)
+File: ProjectSettings  (ProjectSettings.h)
+File: ProjectSettingsDialog.h  (ProjectSettingsDialog.h)
 File: Settings  (Settings.h)
 File: SettingsDialog  (SettingsDialog.h)
+File: StringTokenizer  (StringTokenizer.h)
 File: TabEditor  (TabEditor.h)
 File: TabItem  (TabItem.h)
 
@@ -47,5 +52,6 @@ Group: Index  {
    Class Index: Classes
    Function Index: Functions
    Variable Index: Variables
+   File Index: Files
    }  # Group: Index
 

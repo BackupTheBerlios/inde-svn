@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "SettingsDialog.h"
 #include "AboutDialog.h"
+#include "NewProjectWizard.h"
+#include "ProjectSettingsDialog.h"
 
 FXDEFMAP(MainWindow) MainWindowMap[] = {
 	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_QUIT,				MainWindow::onQuit),
@@ -70,12 +72,6 @@ MainWindow::~MainWindow()
 
 	delete statusBar;
 	delete browserFrame;
-}
-
-void MainWindow::editSettings()
-{
-	SettingsDialog dialog(this, "InDE settings");
-	dialog.run();
 }
 
 long MainWindow::onQuit(FXObject*, FXSelector, void*)
@@ -148,7 +144,7 @@ void MainWindow::buildMenu()
 	new FXMenuCommand(projectMenu, "&Open ...", NULL, this, ID_OPEN_PROJECT);
 	new FXMenuSeparator(projectMenu);
 	new FXMenuCommand(projectMenu, "&Close", NULL, this, ID_CLOSE_PROJECT);
-	new FXMenuCommand(projectMenu, "Close &all", NULL, this, ID_CLOSE_PROJECTS);
+	new FXMenuCommand(projectMenu, "Close &all", NULL, this, ID_CLOSE_ALL_PROJECTS);
 	new FXMenuSeparator(projectMenu);
 	new FXMenuCommand(projectMenu, "&Settings ...", NULL, this, ID_PROJECT_SETTINGS);
 
@@ -183,7 +179,7 @@ void MainWindow::buildContent()
 	new FXTabItem(browserFrame, "Project");
 	FXVerticalFrame* frm5 	= new FXVerticalFrame(browserFrame, LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_RAISED, 0, 0, 0, 0, 5, 5, 5, 5, 0, 0);
 	FXVerticalFrame* frm6 	= new FXVerticalFrame(frm5, LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_LINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	projectBrowser 			= new FXDirList(frm6, NULL, 0, DIRLIST_SHOWFILES|DIRLIST_NO_OWN_ASSOC|TREELIST_BROWSESELECT|TREELIST_SHOWS_LINES|TREELIST_SHOWS_BOXES|LAYOUT_FILL_X|LAYOUT_FILL_Y);
+	projectBrowser 			= new ProjectBrowser(frm6, NULL, 0, TREELIST_BROWSESELECT|TREELIST_SHOWS_LINES|TREELIST_SHOWS_BOXES|LAYOUT_FILL_X|LAYOUT_FILL_Y);
 	FXHorizontalFrame* frm7 = new FXHorizontalFrame(frm5, LAYOUT_FILL_X, 0, 0, 0, 0, 0, 0, 4, 0, 0, 4);
 	new FXLabel(frm7, "Filter:", NULL, LAYOUT_CENTER_Y);
 	projectFilter 			= new FXComboBox(frm7, 25, NULL, 0, COMBOBOX_STATIC|LAYOUT_FILL_X|FRAME_SUNKEN|FRAME_THICK);
@@ -283,9 +279,38 @@ long MainWindow::onEditCmd(FXObject*, FXSelector sel, void*)
 
 long MainWindow::onProjectCmd(FXObject*, FXSelector sel, void*)
 {
+	FXString active;
+	int i;
 	FXTRACE((1, "MainWindow::onProjectCmd\n"));
 	switch (FXSELID(sel))
 	{
+		case ID_NEW_PROJECT:
+			newProject();
+		break;
+		case ID_OPEN_PROJECT:
+			openProject();
+		break;
+		case ID_CLOSE_PROJECT:
+			active = projectBrowser->getActiveProject().text();
+			for (i = 0; i < projects.no(); ++i)
+			{
+				if (active == projects[i]->getProjectName())
+					break;
+			}
+			// close the project
+		break;
+		case ID_CLOSE_ALL_PROJECTS:
+			// close all projects
+		break;
+		case ID_PROJECT_SETTINGS:
+			active = projectBrowser->getActiveProject().text();
+			for (i = 0; i < projects.no(); ++i)
+			{
+				if (active == projects[i]->getProjectName())
+					break;
+			}
+			editProjectSettings(projects[i]);
+		break;
 	}
 	return 1;
 }
@@ -336,6 +361,12 @@ long MainWindow::onHelpCmd(FXObject*, FXSelector sel, void*)
 	return 1;
 }
 
+void MainWindow::editSettings()
+{
+	SettingsDialog dialog(this, "InDE settings");
+	dialog.run();
+}
+
 void MainWindow::readSettings()
 {
 	settings->setDefault("baseDir", FXFile::getHomeDirectory());
@@ -364,13 +395,61 @@ void MainWindow::applySettings()
 	editor->applySettings();
 }
 
+void MainWindow::newProject()
+{
+	NewProjectWizard wizard(this, "new InDE project");
+	wizard.run();
+}
+
+FXbool MainWindow::openProject(const FXString& location)
+{
+	FXString target = location;
+	FXString name;
+	if (location == "")
+	{
+		FXDirDialog dialog(this, "Select project by directory");
+		dialog.setDirectory(settings->getStringValue("baseDir"));
+		if (dialog.execute())
+		{
+			target = dialog.getDirectory();
+			if (!FXFile::exists(target))
+			{
+				FXMessageBox::error(this, MBOX_OK, "Error", "Directory doesn't exist.");
+				return false;
+			}
+		}
+	}
+		
+	if (FXFile::isDirectory(target+"/"))
+	{
+		name = FXFile::name(target);
+		target += "/project.inde";
+	}
+	if (!FXFile::isFile(target))
+	{
+		FXMessageBox::error(this, MBOX_OK, "Error", "Directory doesn't seem to contain a InDE project. Doesn't a project.inde exist?");
+		return false;
+	}
+
+	ProjectSettings* settings = new ProjectSettings(target, name);
+	projects.append(settings);
+	projectBrowser->openProject(settings);
+	return true;
+}
+
+void MainWindow::editProjectSettings(ProjectSettings* settings)
+{
+	ProjectSettingsDialog dialog(this, "InDE settings");
+	dialog.run(settings);
+}
+
 void MainWindow::aboutDialog()
 {
 	AboutDialog dialog(this, "About InDE SVN");
 	dialog.setProgramName("InDE SVN snapshot");
 	dialog.setDescription("InDE is a cross-platform C/C++ IDE.\n"
 		"It supports managed projects using SCons instead of traditional Makefiles.\n"
-		"The GUI is built on the top of the FOX-Toolkit, which probably is the fastest toolkit available for linux.");
+		"The GUI is built on top of the FOX-Toolkit, which probably is the fastest toolkit available for linux.");
 	dialog.setLicense("GNU GPL");
 	dialog.setCopyright("© 2005, Jannis Pohlmann and Jochen Rassler");
 	dialog.addDeveloper("Jannis Pohlmann", "devel@sten-net.de", "Head developer, Coordinator");
