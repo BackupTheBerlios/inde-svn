@@ -18,8 +18,8 @@ namespace FS
 		Returns the directory seperator.
 		
 		Returns:
-			- Windows: *\\*
-			- Linux: */*
+			- Windows: \\
+			- Linux: /
 	*/
 	FXString dirSeparator();
 	
