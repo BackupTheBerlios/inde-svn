@@ -4,7 +4,7 @@ InDE 0.0.1 build instructions
    i. Requirements
   ii. Commands
  iii. Help
- 
+
 -----------------------------
 
 
@@ -32,11 +32,11 @@ ii. Commands
 Change to the main InDE directory. Using your SVN checkout this would be:
 
 	cd inde/trunk
-	
+
 Then, type:
 
 	scons
-	
+
 and you will get a list of commands you can use in order to compile and
 install InDE on your system. These commands are:
 
@@ -47,7 +47,7 @@ install InDE on your system. These commands are:
 
 Besides you might want to have a look at SCons' parameters.
 You can do this by typing:
-	
+
 	scons -h
 
 
@@ -58,14 +58,13 @@ unstable - you may not expect anything to work. Nevertheless it would be
 great if you managed to report bugs, ideas and stuff.
 
 You can do this at our berliOS project website at
-	
+
 	http://developers.berlios.de/projects/inde
-	
+
 or contact us directly by using the contact forms on our official website:
 
 	http://inde.berlios.de
 
 Thanks in advance!
 
-The Double-J-Team,
 Jochen Rassler and Jannis Pohlmann.

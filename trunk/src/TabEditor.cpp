@@ -141,7 +141,7 @@ FXbool TabEditor::saveDocument(FXuint index)
 {
 	FXTRACE((1, "TabEditor::saveDocument(%i)\n", index));
 	Edit* edit = (Edit*)(childAtIndex(index*2+1)->childAtIndex(0)->childAtIndex(0));
-	if (!FXFile::isWritable(edit->getFilename()))
+	if (edit->getFilename() != "Untitled" && !FXFile::isWritable(edit->getFilename()))
 	{
 		return false;
 	}
@@ -405,7 +405,10 @@ long TabEditor::onTextInserted(FXObject* sender, FXSelector, void*)
 	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent());
 	Edit* edit = (Edit*)sender;
 	edit->setModified();
-	restyleDocument(index);
+	if (edit->getSyntax())
+	{
+		restyleDocument(index);
+	}
 	return 1;
 }
 
@@ -416,7 +419,10 @@ long TabEditor::onTextReplaced(FXObject* sender, FXSelector, void*)
 	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent())-1;
 	Edit* edit = (Edit*)sender;
 	edit->setModified();
-	restyleDocument(index);
+	if (edit->getSyntax())
+	{
+		restyleDocument(index);
+	}
 	return 1;
 }
 
@@ -435,6 +441,9 @@ long TabEditor::onTextDeleted(FXObject* sender, FXSelector, void*)
 	FXuint index = indexOfChild(((Edit*)sender)->getParent()->getParent())-1;
 	Edit* edit = (Edit*)sender;
 	edit->setModified();
-	restyleDocument(index);
+	if (edit->getSyntax())
+	{
+		restyleDocument(index);
+	}
 	return 1;
 }

@@ -111,14 +111,16 @@ env.Default(InDE)
 ## Install instructions                         ##
 ##################################################
 
-DIR_CONF = "/usr/local/share/"+config["PROJECT_NAME"]+"/"+config["PROJECT_VERSION"]
+DIR_CONF = "/usr/local/share/"+config["PROJECT_NAME"]+"-"+config["PROJECT_VERSION"]
 DIR_BIN = "/usr/local/bin"
-DIR_DOC = "/usr/local/doc/"+config["PROJECT_NAME"]+"/"+config["PROJECT_VERSION"]
+DIR_DOC = "/usr/local/doc/"+config["PROJECT_NAME"]+"-"+config["PROJECT_VERSION"]
+DIR_SHARE = "/usr/local/share/"+config["PROJECT_NAME"]+"-"+config["PROJECT_VERSION"]
 
 env.Install(DIR_BIN, InDE)
-env.Install(DIR_CONF, "conf/syntax.stx")
+env.Install(DIR_SHARE, "share/syntax.stx")
 inst_bin = env.Alias("install-bin", DIR_BIN)
 inst_conf = env.Alias("install-conf", DIR_CONF)
-env.Alias("install", [inst_bin, inst_conf])
+inst_share = env.Alias("install-share", DIR_SHARE)
+env.Alias("install", [inst_bin, inst_conf, inst_share])
 
 print
