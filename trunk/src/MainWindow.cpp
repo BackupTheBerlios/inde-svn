@@ -4,6 +4,7 @@
 #include "NewProjectWizard.h"
 #include "ProjectSettingsDialog.h"
 #include "FileSystem.h"
+#include "NewClassDialog.h"
 
 FXDEFMAP(MainWindow) MainWindowMap[] = {
 	FXMAPFUNC(SEL_COMMAND,		MainWindow::ID_QUIT,				MainWindow::onQuit),
@@ -175,8 +176,7 @@ void MainWindow::buildContent()
 
 	new FXTabItem(browserFrame, "Project");
 	FXVerticalFrame* frm5 	= new FXVerticalFrame(browserFrame, LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_RAISED, 0, 0, 0, 0, 5, 5, 5, 5, 0, 0);
-	FXVerticalFrame* frm6 	= new FXVerticalFrame(frm5, LAYOUT_FILL_X|LAYOUT_FILL_Y|FRAME_LINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	projectBrowser 			= new ProjectBrowser(frm6, this);
+	projectBrowser 			= new ProjectBrowser(frm5, this);
 	FXHorizontalFrame* frm7 = new FXHorizontalFrame(frm5, LAYOUT_FILL_X, 0, 0, 0, 0, 0, 0, 4, 0, 0, 4);
 	new FXLabel(frm7, "Filter:", NULL, LAYOUT_CENTER_Y);
 	projectFilter 			= new FXComboBox(frm7, 25, NULL, 0, COMBOBOX_STATIC|LAYOUT_FILL_X|FRAME_SUNKEN|FRAME_THICK);
@@ -199,6 +199,18 @@ long MainWindow::onFileCmd(FXObject*, FXSelector sel, void*)
 			break;
 
 		case ID_NEW_CLASS:
+			if (projects.no() > 0)
+			{
+				NewClassDialog classDialog(this, "Add file to project?");
+				FXString active = projectBrowser->getActiveProject();
+				int i;
+				for (i = 0; i < projects.no(); ++i)
+				{
+					if (active == projects[i]->getProjectName())
+						break;
+				}
+				classDialog.run(projects[i]);
+			}
 			break;
 
 		case ID_OPEN_FILE:
