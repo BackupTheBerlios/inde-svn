@@ -190,7 +190,12 @@ long MainWindow::onCmdNew(FXObject*, FXSelector, void*)
 
 long MainWindow::onCmdNewProject(FXObject*, FXSelector, void*)
 {
-	return 1;
+	NewProjectWizard wizard(this, _("new InDE project"));
+	if (wizard.execute(PLACEMENT_SCREEN))
+	{
+		//saveSettings();
+	}
+	//return 1;
 }
 
 
